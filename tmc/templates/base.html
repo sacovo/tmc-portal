@@ -1,0 +1,18 @@
+{% extends "site.html" %}
+{% load i18n %}
+
+{% block body %}
+  <main class="container">
+    {% block title %}{% endblock title %}
+    <hr/>
+    {% block content %} {% endblock content %}
+  </main>
+
+  <footer class="container-fluid pt-5 pb-2 bg-dark text-light">
+    <div class="d-flex justify-content-center flex-wrap">
+      <a class="text-light mx-2" href="#">{% trans "Privacy Policy" %}</a>
+      <a class="text-light mx-2" href="#">{% trans "Impressum" %}</a>
+      <a class="text-light mx-2" href="#">{% trans "Contact" %}</a>
+    </div>
+  </footer>
+{% endblock body %}

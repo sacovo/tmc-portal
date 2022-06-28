@@ -1,0 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-22 12:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: core/settings.py:124 tmc/models.py:21
+msgid "German"
+msgstr "Deutsch"
+
+#: core/settings.py:125 tmc/models.py:20
+msgid "English"
+msgstr "Englisch"
+
+#: core/settings.py:126
+msgid "French"
+msgstr "Französisch"
+
+#: core/settings.py:127
+msgid "Italian"
+msgstr "Italienisch"
+
+#: core/settings.py:128
+msgid "Spanish"
+msgstr "Spanisch"
+
+#: tmc/models.py:14
+msgid "Male"
+msgstr "Männlich"
+
+#: tmc/models.py:15
+msgid "Female"
+msgstr "Weiblich"
+
+#: tmc/models.py:16
+msgid "Non-Binary"
+msgstr "Non-Binär"
+
+#: tmc/models.py:40
+msgid "instrument"
+msgstr "Instrument"
+
+#: tmc/models.py:42
+msgid "gender"
+msgstr "Gender"
+
+#: tmc/models.py:43
+msgid "name"
+msgstr "Name"
+
+#: tmc/models.py:45
+msgid "date of birth"
+msgstr "Geburtsdatum"
+
+#: tmc/models.py:47
+msgid "nationality"
+msgstr "Nationalität"
+
+#: tmc/models.py:49
+msgid "address"
+msgstr "Adresse"
+
+#: tmc/models.py:51
+msgid "language"
+msgstr "Sprache"
+
+#: tmc/models.py:55
+msgid "language of correspond"
+msgstr "Korrespondenzsprache"
+
+#: tmc/models.py:58
+msgid "phone"
+msgstr "Handy"
+
+#: tmc/models.py:59
+msgid "e-mail"
+msgstr "E-Mail"
+
+#: tmc/models.py:61
+msgid "education"
+msgstr "Ausbildung"
+
+#: tmc/models.py:62
+msgid "occupation"
+msgstr "Beschäftigung"
+
+#: tmc/models.py:63
+msgid "notes"
+msgstr "Notizen"
+
+#: tmc/models.py:65
+msgid "emergency contact"
+msgstr "Notfallkontakt"
+
+#: tmc/models.py:66
+msgid "emergency phone"
+msgstr "Notfallkontakt Telefon"
+
+#: tmc/models.py:70
+msgid "emergency relation"
+msgstr "Notfallkontakt Beziehung"
+
+#: tmc/models.py:73
+msgid "accomodation needed"
+msgstr "Unterkunft benötigt"
+
+#: tmc/models.py:74
+msgid "smoker"
+msgstr "Raucher*in"
+
+#: tmc/models.py:75
+msgid "need food"
+msgstr "Essen benötigt"
+
+#: tmc/models.py:76
+msgid "vegetarian"
+msgstr "Vegetarisch"
+
+#: tmc/models.py:78
+msgid "allergies"
+msgstr "Allergien"
+
+#: tmc/models.py:141
+msgid "Morning"
+msgstr "Morgen"
+
+#: tmc/models.py:142
+msgid "Afternoon"
+msgstr "Nachmittag"
+
+#: tmc/models.py:143
+msgid "Evening"
+msgstr "Abend"
+
+#: tmc/models.py:144
+msgid "Whole Day"
+msgstr "Ganzer Tag"

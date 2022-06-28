@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags i18n %}
+
+{% block document_title %}{% trans "Login" %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% trans "TMC Login" %}</h1>
+{% endblock title %}
+
+{% block content %}
+  <p>{% trans "Enter the email you used to register your application." %}</p>
+  {% crispy form %}
+{% endblock content %}

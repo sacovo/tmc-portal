@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags i18n %}
+
+{% block document_title %}{% trans "Signup" %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% trans "TMC Signup" %}</h1>
+{% endblock title %}
+
+{% block content %}
+  <p>
+    {% blocktrans %}Register now for the muri competition, deadline for your application is the 1. September 2022{% endblocktrans %}
+  </p>
+  <p>{% blocktrans %}Already registered?{% endblocktrans %} <a href="{% url 'tmc:login' %}">{% trans 'Login here' %}</a></p>
+  {% crispy form %}
+  <p>
+    {% blocktrans %}By sending this form you agree to the terms and conditions of the muri competition, as well as the processing of your personal details as stated in the privacy policy.{% endblocktrans %}
+  </p>
+{% endblock content %}

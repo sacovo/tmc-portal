@@ -1,0 +1,18 @@
+{% extends "profile_base.html" %}
+{% load crispy_forms_tags i18n %}
+
+{% block document_title %}{% trans "Upload documents" %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% trans "Upload documents" %}</h1>
+{% endblock title %}
+
+{% block content %}
+  <p>
+    {% blocktrans %}Upload the required documents until the end of the inscription deadline!{% endblocktrans %}
+  </p>
+  {% crispy form %}
+  <p>
+    {% blocktrans %}By sending this form you agree to the terms and conditions of the muri competition, as well as the processing of your personal details as stated in the privacy policy.{% endblocktrans %}
+  </p>
+{% endblock content %}

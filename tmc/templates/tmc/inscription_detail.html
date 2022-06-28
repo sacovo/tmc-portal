@@ -1,0 +1,40 @@
+{% extends "profile_base.html" %}
+{% load i18n fields %}
+
+{% block document_title %}{% trans "Your information" %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% trans "Your Information" %}</h1>
+{% endblock title %}
+
+{% block content %}
+  <p>{% trans "Here you see all the information about your inscription. You can change it by visiting the respective site in the navigation above." %}</p>
+
+  {% with instance.todos as todos %}
+
+    {% if todos %}
+      <div class="alert alert-warning" role="alert">
+        <h2>{% trans "Your todos" %}</h2>
+        <ul>
+          {% for todo in todos %}
+            <li>{{ todo }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+  {% endwith %}
+
+  <table class="table table-sm">
+    {% for field in fields %}
+      <tr>
+        <th>
+          {{ field.field.verbose_name|capfirst }}
+        </th>
+        <td>
+          {{ field.value|render }}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock content %}

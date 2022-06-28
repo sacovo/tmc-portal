@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block document_title %}{% trans "Login link sent" %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% trans "Login link sent" %}</h1>
+{% endblock title %}
+
+{% block content %}
+  <p>
+    {% blocktrans %}We just sent you a link to login to the portal, you can close this page now and open the portal with the link in your mail.{% endblocktrans %}
+  </p>
+{% endblock content %}

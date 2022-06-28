@@ -1,0 +1,113 @@
+{% extends "profile_base.html" %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block document_title %}{% trans "Recordings" %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% trans "Recordings" %}</h1>
+{% endblock title %}
+
+{% block extra_style %}
+  <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+  <link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet" />
+  <style>
+    .filepond--credits {
+      display: none;
+    }
+  </style>
+{% endblock extra_style %}
+
+{% block content %}
+  <p>{% trans "Here you can upload your recordings for thre required pieces." %}</p>
+  <p>{% trans "Valid filetypes are mp4, wav, mov and mkv. Please convert your video to one of these types before uploading!" %}</p>
+  <div class="row">
+    {% for requirement in requirements %}
+      <div class="col-md-6">
+        <div class="card m-2">
+          <div class="card-body">
+            <h5 class="card-title">{{ requirement.name }}</h5>
+            {% if requirement.recording %}
+              <h6 class="card-subtitle mb-2 text-muted">{% trans "You have uploaded a recording." %}</h6>
+            {% else %}
+              <h6 class="card-subtitle mb-2 text-muted">{% trans "You still need to upload a recording" %}</h6>
+            {% endif %}
+            <video
+              id="player_{{ requirement.pk }}"
+              class="video-js"
+              controls
+              {% if requirement.recording %}
+                preload="auto"
+              {% else %}
+                preload="none"
+                poster="https://via.placeholder.com/1280x720.png?text=Upload+your+video+below"
+              {% endif %}
+              width="1280"
+              height="720"
+              data-setup='{"fluid": true}'
+            >
+              {% if requirement.recording %}
+                <source src="{{ requirement.recording.recording.url }}" />
+              {% endif %}
+            </video>
+            <input type="file" data-requirement="{{ requirement.pk }}" accept=".mov,.mp4,.mkv,.wav"/>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock content %}
+
+{% block extra_script %}
+  <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+  <script src="https://vjs.zencdn.net/7.19.2/video.min.js"></script>
+  <script>
+    const inscriptionPk = "{{instance.pk}}";
+    const inputElements = document.querySelectorAll('input[type="file"]');
+
+    FilePond.setOptions({
+      instantUpload: false,
+      chunkUploads: true,
+      server: {
+        url: '/fp',
+        process: '/process/',
+        patch: '/patch/',
+        revert: '/revert/',
+        fetch: '/fetch/?target=',
+        load: '/load/',
+      },
+      beforeAddFile: (item) => {
+        const extension = item.fileExtension;
+        return ['mp4', 'wav', 'mov', 'mkv'].includes(extension.toLowerCase());
+      },
+    });
+
+    const csrf_token = "{{csrf_token}}";
+
+    inputElements.forEach((element) => {
+      const requirementPk = element.dataset.requirement;
+      const pond = FilePond.create(element, {onprocessfile: (error, file) => {
+        const id = file.serverId;
+        const extension = file.fileExtension;
+
+        const data = new FormData();
+        data.append('extension', extension);
+        data.append('upload_id', id);
+        data.append('csrfmiddlewaretoken', csrf_token);
+
+        fetch(`/inscription/${inscriptionPk}/upload/${requirementPk}/`, {
+          method: "POST",
+          body: data,
+        }).then(response => response.text()).then(url => {
+          console.log(url)
+          const player = videojs(`player_${requirementPk}`);
+          player.src(url);
+        });
+      }});
+      // this is needed, otherwise the upload does not work
+      pond.name = 'filepond'
+
+
+    })
+  </script>
+{% endblock extra_script %}
