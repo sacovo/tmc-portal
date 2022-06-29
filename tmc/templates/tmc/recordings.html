@@ -19,8 +19,8 @@
 {% endblock extra_style %}
 
 {% block content %}
-  <p>{% trans "Here you can upload your recordings for thre required pieces." %}</p>
-  <p>{% trans "Valid filetypes are mp4, wav, mov and mkv. Please convert your video to one of these types before uploading!" %}</p>
+  <p>{% trans "Here you can upload your recordings for the required pieces." %}</p>
+  <p>{% trans "Your recording must be in the mp4 format. Please convert your video to one of these types before uploading!Your recordings are not allowed to be cut." %}</p>
   <div class="row">
     {% for requirement in requirements %}
       <div class="col-md-6">
@@ -40,7 +40,7 @@
                 preload="auto"
               {% else %}
                 preload="none"
-                poster="https://via.placeholder.com/1280x720.png?text=Upload+your+video+below"
+                poster="https://via.placeholder.com/1280x720.png?text={% trans "Upload+your+video+below" %}"
               {% endif %}
               width="1280"
               height="720"

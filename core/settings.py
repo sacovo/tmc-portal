@@ -177,6 +177,10 @@ vars().update(EMAIL_CONFIG)
 if not DEBUG:
     EMAIL_BACKEND = 'django_q_email.backends.DjangoQBackend'
 
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='mail@localhost')
+
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
 # Run behind proxy for tls
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

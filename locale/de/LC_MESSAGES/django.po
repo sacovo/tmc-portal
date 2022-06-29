@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-22 12:54+0000\n"
+"POT-Creation-Date: 2022-06-29 22:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,134 +18,354 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: core/settings.py:124 tmc/models.py:21
+#: core/settings.py:136 tmc/models.py:28
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:125 tmc/models.py:20
+#: core/settings.py:137 tmc/models.py:27
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:126
+#: core/settings.py:138
 msgid "French"
 msgstr "Französisch"
 
-#: core/settings.py:127
+#: core/settings.py:139
 msgid "Italian"
 msgstr "Italienisch"
 
-#: core/settings.py:128
+#: core/settings.py:140
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: tmc/models.py:14
-msgid "Male"
-msgstr "Männlich"
+#: tmc/forms.py:49 tmc/forms.py:64
+msgid "Submit"
+msgstr "Absenden"
 
-#: tmc/models.py:15
+#: tmc/forms.py:75
+msgid "This e-mail is not registered."
+msgstr "Diese E-Mail Adresse ist nicht registriert"
+
+#: tmc/forms.py:84 tmc/templates/tmc/login.html:4
+msgid "Login"
+msgstr "Anmelden"
+
+#: tmc/models.py:20
 msgid "Female"
 msgstr "Weiblich"
 
-#: tmc/models.py:16
+#: tmc/models.py:21
+msgid "Male"
+msgstr "Männlich"
+
+#: tmc/models.py:22
 msgid "Non-Binary"
 msgstr "Non-Binär"
 
-#: tmc/models.py:40
+#: tmc/models.py:23
+msgid "Don't know"
+msgstr "Weiss nicht"
+
+#: tmc/models.py:101
 msgid "instrument"
 msgstr "Instrument"
 
-#: tmc/models.py:42
+#: tmc/models.py:103
 msgid "gender"
 msgstr "Gender"
 
-#: tmc/models.py:43
-msgid "name"
+#: tmc/models.py:104
+msgid "given name"
+msgstr "Vorname"
+
+#: tmc/models.py:105
+msgid "surname"
 msgstr "Name"
 
-#: tmc/models.py:45
+#: tmc/models.py:107
 msgid "date of birth"
 msgstr "Geburtsdatum"
 
-#: tmc/models.py:47
+#: tmc/models.py:109
 msgid "nationality"
 msgstr "Nationalität"
 
-#: tmc/models.py:49
+#: tmc/models.py:111
 msgid "address"
 msgstr "Adresse"
 
-#: tmc/models.py:51
+#: tmc/models.py:113
 msgid "language"
 msgstr "Sprache"
 
-#: tmc/models.py:55
-msgid "language of correspond"
+#: tmc/models.py:117
+msgid "language of correspondence"
 msgstr "Korrespondenzsprache"
 
-#: tmc/models.py:58
+#: tmc/models.py:121
 msgid "phone"
 msgstr "Handy"
 
-#: tmc/models.py:59
+#: tmc/models.py:122
+msgid "please remember to add your country prefix"
+msgstr "Bitte vergiss die Ländervorwahl nicht!"
+
+#: tmc/models.py:125
 msgid "e-mail"
 msgstr "E-Mail"
 
-#: tmc/models.py:61
-msgid "education"
-msgstr "Ausbildung"
+#: tmc/models.py:127
+msgid "This email has already been registered."
+msgstr "Diese E-Mail Adresse ist bereits registriert."
 
-#: tmc/models.py:62
+#: tmc/models.py:129
+msgid ""
+"make sure your e-mail is correct, as all communication will be done over e-"
+"mail"
+msgstr ""
+"Stelle sicher, dass deine E-Mail Adresse korrekt ist, da alle Kommunikation "
+"über sie erfolgen wird."
+
+#: tmc/models.py:131
+msgid "artistic CV"
+msgstr ""
+
+#: tmc/models.py:132
 msgid "occupation"
 msgstr "Beschäftigung"
 
-#: tmc/models.py:63
+#: tmc/models.py:135
 msgid "notes"
 msgstr "Notizen"
 
-#: tmc/models.py:65
+#: tmc/models.py:137
+msgid ""
+"any information that we should know beforhand, not mentioned otherwise in "
+"this form"
+msgstr "Gibt es sonst nocht etwas, das wir wissen müssen?"
+
+#: tmc/models.py:142
 msgid "emergency contact"
 msgstr "Notfallkontakt"
 
-#: tmc/models.py:66
+#: tmc/models.py:143
+msgid "name of your emergency contact"
+msgstr "Name des Notfallkontakts"
+
+#: tmc/models.py:146
 msgid "emergency phone"
 msgstr "Notfallkontakt Telefon"
 
-#: tmc/models.py:70
+#: tmc/models.py:147
+msgid "phone number of your emergency contact"
+msgstr "Telefonnummer deines Notfallkontakts"
+
+#: tmc/models.py:152
 msgid "emergency relation"
 msgstr "Notfallkontakt Beziehung"
 
-#: tmc/models.py:73
+#: tmc/models.py:153
+msgid "how are you related to your emergency contact, (family, friends, ...)"
+msgstr "In welcher Beziehung stehst du zu deinem Notfallkontakt"
+
+#: tmc/models.py:157
 msgid "accomodation needed"
 msgstr "Unterkunft benötigt"
 
-#: tmc/models.py:74
+#: tmc/models.py:158
+msgid "do you need us to organise accomodation?"
+msgstr "Sollen wir für dich eine Unterkunft organisieren?"
+
+#: tmc/models.py:159
 msgid "smoker"
 msgstr "Raucher*in"
 
-#: tmc/models.py:75
+#: tmc/models.py:160
 msgid "need food"
 msgstr "Essen benötigt"
 
-#: tmc/models.py:76
+#: tmc/models.py:161
 msgid "vegetarian"
 msgstr "Vegetarisch"
 
-#: tmc/models.py:78
+#: tmc/models.py:163
 msgid "allergies"
 msgstr "Allergien"
 
-#: tmc/models.py:141
-msgid "Morning"
-msgstr "Morgen"
+#: tmc/models.py:165
+msgid "submitted"
+msgstr "Abgeschickt"
 
-#: tmc/models.py:142
-msgid "Afternoon"
-msgstr "Nachmittag"
+#: tmc/models.py:192
+msgid "Upload required recordings"
+msgstr "Erforderliche Aufnahmen hochladen"
 
-#: tmc/models.py:143
-msgid "Evening"
-msgstr "Abend"
+#: tmc/models.py:195
+msgid "Upload scan of your passport"
+msgstr "Einen Scan deines Passes hochladen"
 
-#: tmc/models.py:144
-msgid "Whole Day"
-msgstr "Ganzer Tag"
+#: tmc/models.py:197
+msgid "Upload a photo of yourself"
+msgstr "Ein Photo von dir hochladen"
+
+#: tmc/templates/base.html:13 tmc/templates/profile_base.html:54
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung"
+
+#: tmc/templates/base.html:14 tmc/templates/profile_base.html:55
+msgid "Impressum"
+msgstr "Impressum"
+
+#: tmc/templates/base.html:15 tmc/templates/profile_base.html:56
+msgid "Contact"
+msgstr "Kontakt"
+
+#: tmc/templates/profile_base.html:14
+msgid "Account"
+msgstr "Profil"
+
+#: tmc/templates/profile_base.html:17
+msgid "Update Account"
+msgstr "Profil bearbeiten"
+
+#: tmc/templates/profile_base.html:21 tmc/templates/tmc/recordings.html:5
+#: tmc/templates/tmc/recordings.html:8
+msgid "Recordings"
+msgstr "Aufnahmen"
+
+#: tmc/templates/profile_base.html:29
+msgid "Documents"
+msgstr "Dokumente"
+
+#: tmc/templates/profile_base.html:36
+msgid "Admin"
+msgstr "Admin"
+
+#: tmc/templates/profile_base.html:40
+msgid "Logout"
+msgstr "Abmelden"
+
+#: tmc/templates/tmc/inscription_detail.html:4
+msgid "Your information"
+msgstr "Deine Information"
+
+#: tmc/templates/tmc/inscription_detail.html:7
+msgid "Your Information"
+msgstr "Deine Information"
+
+#: tmc/templates/tmc/inscription_detail.html:11
+msgid ""
+"Here you see all the information about your inscription. You can change it "
+"by visiting the respective site in the navigation above."
+msgstr ""
+"Hier kannst du deine Anmeldung sehen. Du kannst sie bearbeiten, wenn du auf "
+"die entsprechende seite gehst"
+
+#: tmc/templates/tmc/inscription_detail.html:17
+msgid "Your todos"
+msgstr "Deine Aufgaben"
+
+#: tmc/templates/tmc/inscription_documents.html:4
+#: tmc/templates/tmc/inscription_documents.html:7
+msgid "Upload documents"
+msgstr "Dokumente hochladen"
+
+#: tmc/templates/tmc/inscription_documents.html:12
+msgid "Upload the required documents until the 30th of November!"
+msgstr "Lade die benötigten Dokuemnte bis am 30. November hoch."
+
+#: tmc/templates/tmc/inscription_documents.html:16
+#: tmc/templates/tmc/inscription_update.html:16
+#: tmc/templates/tmc/signup.html:17
+msgid ""
+"By sending this form you agree to the terms and conditions of the muri "
+"competition, as well as the processing of your personal details as stated in "
+"the privacy policy."
+msgstr ""
+"Mit dem Absenden dieses Formulars stimmst du den Bedingungen der Muri "
+"Competition zu und erklärst dich mit der Verarbeitung deiner Personendaten "
+"gemäss der Datenschutzerklärungeinverstanden."
+
+#: tmc/templates/tmc/inscription_update.html:4
+#: tmc/templates/tmc/inscription_update.html:7
+msgid "Update information"
+msgstr "Informationen aktualisieren"
+
+#: tmc/templates/tmc/inscription_update.html:12
+msgid ""
+"You can update your information here. Be careful if you change your e-mail "
+"address, if you don't have access to your mail <em>you will not be able to "
+"access your information!</em>"
+msgstr ""
+"Hier kannst du deine Informationen aktualisieren. Pass auf, wenn du deine E-"
+"MailAdresse änderst. Wenn du keinen Zugriff auf deine E-Mail Adresse hast, "
+"<em>kannst dunicht mehr auf deine Informationen zugreifen!</em>"
+
+#: tmc/templates/tmc/login.html:7
+msgid "TMC Login"
+msgstr "TMC Login"
+
+#: tmc/templates/tmc/login.html:11
+msgid "Enter the email you used to register your application."
+msgstr "Gib die E-Mail Adresse an, die zur Anmeldung verwendet hast."
+
+#: tmc/templates/tmc/login_sent.html:4 tmc/templates/tmc/login_sent.html:7
+msgid "Login link sent"
+msgstr "Login Link verschickt"
+
+#: tmc/templates/tmc/login_sent.html:12
+msgid ""
+"We just sent you a link to login to the portal, you can close this page now "
+"and open the portal with the link in your mail."
+msgstr ""
+"Wir haben dir eben einen Link geschickt, mit dem du dich anmelden kannst. "
+"Diese Seite kannst du nun schliessen und dich mit dem Link in deiner E-Mail "
+"anmelden."
+
+#: tmc/templates/tmc/recordings.html:22
+msgid "Here you can upload your recordings for the required pieces."
+msgstr "Hier kannst du die benötigten Aufnahmen hochladen."
+
+#: tmc/templates/tmc/recordings.html:23
+msgid ""
+"Your recording must be in the mp4 format. Please convert your video to one "
+"of these types before uploading!Your recordings are not allowed to be cut."
+msgstr ""
+"Dein Video muss im mp4 Format sein, konvertiere es vor dem hochladen. Die Aufnahmen "
+"dürfen nicht geschnitten werden."
+
+#: tmc/templates/tmc/recordings.html:31
+msgid "You have uploaded a recording."
+msgstr "Du hast eine Aufnahme hochgeladen."
+
+#: tmc/templates/tmc/recordings.html:33
+msgid "You still need to upload a recording"
+msgstr "Du musst diese Aufnahme noch hochladen"
+
+#: tmc/templates/tmc/recordings.html:43
+msgid "Upload+your+video+below"
+msgstr "Lade+dein+Video+hoch"
+
+#: tmc/templates/tmc/signup.html:4
+msgid "Signup"
+msgstr "Anmelden"
+
+#: tmc/templates/tmc/signup.html:7
+msgid "TMC Signup"
+msgstr "TMC Anmeldung"
+
+#: tmc/templates/tmc/signup.html:12
+msgid ""
+"Register now for the muri competition, deadline for your application is the "
+"1. September 2022"
+msgstr ""
+"Melde dich jetzt für The Muri Competition an, die Anmeldefrist ist der 15. "
+"November 2022."
+
+#: tmc/templates/tmc/signup.html:14
+msgid "Already registered?"
+msgstr "Bereits angemeldet?"
+
+#: tmc/templates/tmc/signup.html:14
+msgid "Login here"
+msgstr "Hier anmelden"

@@ -128,7 +128,7 @@ class Inscription(models.Model):
         help_text=_(
             "make sure your e-mail is correct, as all communication will be done over e-mail"))
 
-    education = models.TextField(max_length=500, verbose_name=_("education"))
+    education = models.TextField(max_length=500, verbose_name=_("artistic CV"))
     occupation = models.CharField(max_length=60, verbose_name=_("occupation"))
     notes = models.TextField(
         blank=True,
@@ -177,7 +177,7 @@ class Inscription(models.Model):
     photo = models.ImageField(blank=True, upload_to='photos/')
 
     def uploaded_recordings(self):
-        return Recording.objects.filter(uploader=self).count()
+        return Recording.objects.filter(uploader=self).exclude(recording='').count()
 
     def total_recordings(self):
         return RequiredRecording.objects.filter(instrument=self.instrument).count()

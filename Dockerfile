@@ -36,4 +36,4 @@ RUN python manage.py compilemessages && python manage.py collectstatic
 
 ENTRYPOINT ["/home/app/web/entrypoint.sh"]
 
-CMD gunicorn infra.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn core.wsgi:application --bind 0.0.0.0:8000
