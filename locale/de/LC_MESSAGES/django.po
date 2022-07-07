@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-29 22:15+0200\n"
+"POT-Creation-Date: 2022-07-07 18:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,7 +276,7 @@ msgstr "Lade die benötigten Dokuemnte bis am 30. November hoch."
 
 #: tmc/templates/tmc/inscription_documents.html:16
 #: tmc/templates/tmc/inscription_update.html:16
-#: tmc/templates/tmc/signup.html:17
+#: tmc/templates/tmc/signup.html:21
 msgid ""
 "By sending this form you agree to the terms and conditions of the muri "
 "competition, as well as the processing of your personal details as stated in "
@@ -331,8 +331,8 @@ msgid ""
 "Your recording must be in the mp4 format. Please convert your video to one "
 "of these types before uploading!Your recordings are not allowed to be cut."
 msgstr ""
-"Dein Video muss im mp4 Format sein, konvertiere es vor dem hochladen. Die Aufnahmen "
-"dürfen nicht geschnitten werden."
+"Dein Video muss im mp4 Format sein, konvertiere es vor dem hochladen. Die "
+"Aufnahmen dürfen nicht geschnitten werden."
 
 #: tmc/templates/tmc/recordings.html:31
 msgid "You have uploaded a recording."
@@ -363,9 +363,21 @@ msgstr ""
 "November 2022."
 
 #: tmc/templates/tmc/signup.html:14
+msgid "Terms of application"
+msgstr "Teilnahmebedingungen"
+
+#: tmc/templates/tmc/signup.html:16
+msgid ""
+"Young soloists born in or after 1993 are eligible to apply to the "
+"competition. A maximum of 50 participants per instrument will be admitted."
+msgstr ""
+"Junge Solist*innen geboren in oder nach 1993 können sich für den Wettbewerb anmelden. Jeweils max. 50"
+"Teilnehmende pro Instrument werden zum Wettbewerb zugelassen."
+
+#: tmc/templates/tmc/signup.html:18
 msgid "Already registered?"
 msgstr "Bereits angemeldet?"
 
-#: tmc/templates/tmc/signup.html:14
+#: tmc/templates/tmc/signup.html:18
 msgid "Login here"
 msgstr "Hier anmelden"

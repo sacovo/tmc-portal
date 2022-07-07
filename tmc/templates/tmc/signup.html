@@ -11,6 +11,10 @@
   <p>
     {% blocktrans %}Register now for the muri competition, deadline for your application is the 1. September 2022{% endblocktrans %}
   </p>
+  <h2>{% trans "Terms of application" %}</h2>
+  <p>
+    {% trans "Young soloists born in or after 1993 are eligible to apply to the competition. A maximum of 50 participants per instrument will be admitted." %}
+  </p>
   <p>{% blocktrans %}Already registered?{% endblocktrans %} <a href="{% url 'tmc:login' %}">{% trans 'Login here' %}</a></p>
   {% crispy form %}
   <p>
