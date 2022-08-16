@@ -357,7 +357,7 @@ msgstr "TMC Anmeldung"
 #: tmc/templates/tmc/signup.html:12
 msgid ""
 "Register now for the muri competition, deadline for your application is the "
-"15th of november 2022"
+"15th of november 2022."
 msgstr ""
 "Melde dich jetzt für The Muri Competition an, die Anmeldefrist ist der 15. "
 "November 2022."
