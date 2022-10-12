@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+{% load crispy_forms_tags i18n %}
+
+{% block document_title %}{% if host %}{% trans "Update information" %}{% else %}{% trans "Signup as helper" %}{% endif %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% if helper %}{% trans "Update information" %}{% else %}{% trans "Signup as helper" %}{% endif %}</h1>
+{% endblock title %}
+
+{% block content %}
+  {% if message %}
+    <div class="alert alert-primary" role="alert">
+      {{ message }}
+    </div>
+  {% endif %}
+  <p>
+    {% if helper %}
+      {% blocktrans %}You can update your information here. Be careful if you change your e-mail address, if you don't have access to your mail <em>you will not be able to access your information!</em>{% endblocktrans %}
+    {% else %}
+      {% blocktrans %}Signup as helper using this form{% endblocktrans %}
+    {% endif %}
+
+  </p>
+  <form action="" method="post">
+    {% crispy form %}
+    {% crispy formset formset_helper %}
+    {% csrf_token %}
+  </form>
+  <p>
+    {% blocktrans %}By sending this form you agree to the terms and conditions of the muri competition, as well as the processing of your personal details as stated in the privacy policy.{% endblocktrans %}
+  </p>
+{% endblock content %}

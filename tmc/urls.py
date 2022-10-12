@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from tmc.views import landing, recordings, signup, update_documents, update_signup, upload_recording, view_signup, login_view
+from tmc.views import helper_signup, host_signup, jury_signup, landing, recordings, signup, update_documents, update_signup, upload_recording, view_helper, view_jury, view_signup, login_view, view_host
 
 app_name = "tmc"
 
@@ -14,6 +14,12 @@ urlpatterns = [
     path('inscription/<uuid:inscription_pk>/upload/<int:requirement_pk>/',
          upload_recording,
          name="upload_recording"),
+    path('host-family/<int:pk>/', view_host, name="host_detail"),
+    path('host-family/', host_signup, name="host_signup"),
+    path('helper/<int:pk>/', view_helper, name="helper_detail"),
+    path('helper/', helper_signup, name="helper_signup"),
+    path('jury/<int:pk>/', view_jury, name="jury_detail"),
+    path('jury/', jury_signup, name="jury_signup"),
     path("signup/", signup, name="signup"),
     path("login/", login_view, name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),

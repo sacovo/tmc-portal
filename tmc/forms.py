@@ -1,14 +1,29 @@
 from crispy_forms.layout import Submit
+from django.contrib.auth import get_user_model
 from django import forms
-from django.urls.base import reverse
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
 from django.forms.widgets import DateInput
 
-from tmc.models import Inscription, Recording
+from tmc.models import Helper, HostFamily, Inscription, JuryMember
 
 
-class SignupForm(forms.ModelForm):
+class UserSignupMixin:
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        if self.instance is not None:
+            return email
+
+        if get_user_model().objects.filter(email=email).exists():
+            raise ValidationError("This e-mail is already registered")
+
+        return email
+
+
+class SignupForm(forms.ModelForm, UserSignupMixin):
 
     class Meta:
         model = Inscription
@@ -69,11 +84,12 @@ class LoginForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        inscription = Inscription.objects.filter(email=email).first()
+        user = get_user_model().objects.filter(email=email).first()
 
-        if inscription is None:
+        if user is None:
             raise forms.ValidationError(_("This e-mail is not registered."))
-        return inscription
+
+        return user
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -82,3 +98,120 @@ class LoginForm(forms.Form):
         self.helper.form_method = "post"
         self.helper.form_action = ""
         self.helper.add_input(Submit("submit", _("Login")))
+
+
+class HostForm(forms.ModelForm, UserSignupMixin):
+
+    class Meta:
+        model = HostFamily
+        fields = [
+            'given_name',
+            'surname',
+            'address',
+            'phone',
+            'email',
+            'single_rooms',
+            'double_rooms',
+            'provides_breakfast',
+            'has_own_bathroom',
+            'has_wifi',
+            'provides_transport',
+            'preferred_gender',
+            'pets',
+            'practice_allowed',
+            'practice_notes',
+            'smoking_allowed',
+            'notes',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "id_host"
+        self.helper.form_method = "post"
+        self.helper.form_action = ""
+        self.helper.add_input(Submit("submit", _("Submit")))
+
+
+class HelperForm(forms.ModelForm, UserSignupMixin):
+
+    class Meta:
+        model = Helper
+        fields = [
+            'given_name',
+            'surname',
+            'address',
+            'phone',
+            'email',
+            'notes',
+            'languages',
+            'ressorts',
+            'other_ressorts',
+            'is_spontaneous',
+        ]
+
+        widgets = {
+            'ressorts': forms.CheckboxSelectMultiple(),
+            'languages': forms.CheckboxSelectMultiple(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.form_id = "id_helper"
+
+
+class SlotFormsetHelper(FormHelper):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.form_tag = False
+        self.form_method = 'post'
+        self.form_id = 'id_formset'
+        self.form_class = 'horizontal'
+        self.template = 'bootstrap/table_inline_formset.html'
+        self.add_input(Submit("submit", _("Submit")))
+
+
+class JuryForm(forms.ModelForm, UserSignupMixin):
+
+    class Meta:
+        model = JuryMember
+        fields = [
+            'given_name',
+            'surname',
+            'address',
+            'phone',
+            'email',
+            'notes',
+            'instrument',
+            'date_of_birth',
+            'ahv_number',
+            'city_of_departure',
+            'means_of_travel',
+            'payee',
+            'iban',
+            'bic',
+            'date_of_arrival',
+            'transport_arrival',
+            'location_of_arrival',
+            'terminal_of_arrival',
+            'date_of_departure',
+            'transport_departure',
+            'location_of_departure',
+            'terminal_of_departure',
+            'notes_tranpsort',
+        ]
+
+        widgets = {
+            'date_of_birth': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "id_jury"
+        self.helper.form_method = "post"
+        self.helper.form_action = ""
+        self.helper.add_input(Submit("submit", _("Submit")))

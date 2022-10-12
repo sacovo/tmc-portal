@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags i18n %}
+
+{% block document_title %}{% if host %}{% trans "Update information" %}{% else %}{% trans "Signup as host" %}{% endif %}{% endblock document_title %}
+
+{% block title %}
+  <h1>{% if host %}{% trans "Update information" %}{% else %}{% trans "Signup as host" %}{% endif %}</h1>
+{% endblock title %}
+
+{% block content %}
+  {% if message %}
+    <div class="alert alert-primary" role="alert">
+      {{ message }}
+    </div>
+  {% endif %}
+  <p>
+    {% if host %}
+      {% blocktrans %}You can update your information here. Be careful if you change your e-mail address, if you don't have access to your mail <em>you will not be able to access your information!</em>{% endblocktrans %}
+    {% else %}
+      {% blocktrans %}Signup as host family using this form{% endblocktrans %}
+    {% endif %}
+
+  </p>
+  {% crispy form %}
+  <p>
+    {% blocktrans %}By sending this form you agree to the terms and conditions of the muri competition, as well as the processing of your personal details as stated in the privacy policy.{% endblocktrans %}
+  </p>
+{% endblock content %}

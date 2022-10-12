@@ -1,17 +1,42 @@
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
+from django.db import transaction
+from django.forms import inlineformset_factory
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db import transaction
-from django.core.files import File
-from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse
+from django.utils.translation import gettext as _
+from django_drf_filepond.api import (
+    delete_stored_upload,
+    get_stored_upload,
+    get_stored_upload_file_data,
+    store_upload,
+)
 
-from django_drf_filepond.api import delete_stored_upload, get_stored_upload_file_data, get_stored_upload, store_upload
-
-from tmc.forms import DocumentForm, LoginForm, SignupForm
-from tmc.models import Inscription, Recording, RequiredRecording
-from tmc.services import all_fields, fetch_inscription, process_signup, process_update, send_auth_message
+from tmc.forms import (
+    DocumentForm,
+    HelperForm,
+    HostForm,
+    JuryForm,
+    LoginForm,
+    SignupForm,
+    SlotFormsetHelper,
+)
+from tmc.models import Helper, Recording, RequiredRecording, TimeSlot
+from tmc.services import (
+    all_fields,
+    fetch_helper,
+    fetch_host,
+    fetch_inscription,
+    fetch_jury,
+    process_helper_signup,
+    process_host_signup,
+    process_jury_signup,
+    process_signup,
+    process_update,
+    send_auth_message,
+)
 
 # Create your views here.
 
@@ -19,12 +44,21 @@ from tmc.services import all_fields, fetch_inscription, process_signup, process_
 def landing(request):
     if not request.user.is_authenticated:
         return redirect('tmc:signup')
-    instance = Inscription.objects.filter(user=request.user).first()
 
-    if instance is None and request.user.is_staff:
+    if request.user.is_staff:
         return redirect('admin:index')
-    if instance is not None:
-        return redirect('tmc:inscription_detail', pk=instance.pk)
+
+    user = request.user
+
+    if hasattr(user, 'inscription'):
+        return redirect('tmc:inscription_detail', pk=user.inscription.pk)
+
+    if hasattr(user, 'hostfamily'):
+        return redirect('tmc:host_detail', pk=user.hostfamily.pk)
+
+    if hasattr(user, 'helper'):
+        return redirect('tmc:helper_detail', pk=user.helper.pk)
+
     return redirect('tmc:signup')
 
 
@@ -141,3 +175,136 @@ def signup(request):
             return redirect('tmc:inscription_detail', pk=instance.pk)
 
     return render(request, 'tmc/signup.html', {'form': form})
+
+
+def host_signup(request):
+    form = HostForm()
+
+    if request.method == 'POST':
+        form = HostForm(request.POST)
+
+        if form.is_valid():
+            instance = process_host_signup(form, request)
+            login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
+            return redirect('tmc:host_detail', pk=instance.pk)
+
+    return render(request, 'tmc/host_form.html', {'form': form})
+
+
+@login_required
+def view_host(request, pk):
+    host = fetch_host(pk, request.user)
+    form = HostForm(instance=host)
+
+    message = ''
+
+    if request.method == 'POST':
+        form = HostForm(request.POST, instance=host)
+
+        if form.is_valid():
+            form.save()
+            message = _("Your information was updated")
+
+    return render(
+        request,
+        'tmc/host_form.html',
+        {
+            'host': host,
+            'form': form,
+            'message': message,
+        },
+    )
+
+
+SlotFormset = inlineformset_factory(Helper, TimeSlot, fields=['date', 'slot'], extra=3, max_num=4)
+
+
+def helper_signup(request):
+    form = HelperForm()
+    formset = SlotFormset()
+    helper = SlotFormsetHelper()
+
+    if request.method == 'POST':
+        form = HelperForm(request.POST)
+        formset = SlotFormset(request.POST)
+
+        if form.is_valid() and formset.is_valid():
+            instance = process_helper_signup(form, formset, request)
+            login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
+            return redirect('tmc:helper_detail', pk=instance.pk)
+
+    return render(request, 'tmc/helper_form.html', {
+        'form': form,
+        'formset': formset,
+        'formset_helper': helper,
+    })
+
+
+@login_required
+def view_helper(request, pk):
+    helper = fetch_helper(pk, request.user)
+    form = HelperForm(instance=helper)
+    formset = SlotFormset(instance=helper)
+    formset_helper = SlotFormsetHelper()
+
+    message = ''
+
+    if request.method == 'POST':
+        form = HelperForm(request.POST, instance=helper)
+        formset = SlotFormset(request.POST, instance=helper)
+
+        if form.is_valid() and formset.is_valid():
+            print(request.POST)
+            form.save()
+            formset.save()
+
+            return redirect('tmc:helper_detail', pk=pk)
+
+    return render(
+        request,
+        'tmc/helper_form.html',
+        {
+            'helper': helper,
+            'form': form,
+            'formset': formset,
+            'formset_helper': formset_helper,
+            'message': message,
+        },
+    )
+
+
+def jury_signup(request):
+    form = JuryForm()
+
+    if request.method == 'POST':
+        form = JuryForm(request.POST)
+        if form.is_valid():
+            instance = process_jury_signup(form, request)
+            login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
+            return redirect('tmc:jury_detail', pk=instance.pk)
+    return render(request, 'tmc/jury_form.html', {'form': form})
+
+
+@login_required
+def view_jury(request, pk):
+    jury = fetch_jury(pk, request.user)
+    form = JuryForm(instance=jury)
+
+    message = ''
+
+    if request.method == 'POST':
+        form = JuryForm(request.POST, instance=jury)
+
+        if form.is_valid():
+            form.save()
+            message = _("Your information was updated")
+
+    return render(
+        request,
+        'tmc/jury_form.html',
+        {
+            'jury': jury,
+            'form': form,
+            'message': message,
+        },
+    )

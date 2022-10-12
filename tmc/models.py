@@ -43,16 +43,60 @@ class Instrument(models.Model):
         return self.name
 
 
-class JuryMember(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+class PersonBase(models.Model):
 
+    class Meta:
+        abstract = True
+
+    given_name = models.CharField(max_length=120, verbose_name=_("given name"))
+    surname = models.CharField(max_length=120, verbose_name=_("surname"))
+
+    address = AddressField(verbose_name=_("address"), null=True, blank=True)
+    phone = PhoneNumberField(
+        verbose_name=_("phone"),
+        help_text=_("please remember to add your country prefix"),
+    )
+    email = models.EmailField(
+        verbose_name=_("e-mail"),
+        unique=True,
+        error_messages={'unique': _("This email has already been registered.")},
+        help_text=_(
+            "make sure your e-mail is correct, as all communication will be done over e-mail"))
+    submitted_at = models.DateTimeField(auto_now_add=True, verbose_name=_("submitted"))
+
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.given_name} {self.surname}'
+
+
+class JuryMember(PersonBase):
     instrument = models.ForeignKey(Instrument, models.CASCADE)
+    is_pre = models.BooleanField(default=True)
 
-    is_pre = models.BooleanField()
+    date_of_birth = models.DateField(verbose_name=_("date of birth"), blank=True, null=True)
+    ahv_number = models.CharField(max_length=20, blank=True)
+    notes = models.TextField(blank=True, verbose_name=_("notes"))
+    city_of_departure = models.CharField(max_length=130, blank=True)
+    means_of_travel = models.CharField(max_length=120, blank=True)
+    payee = models.CharField(max_length=120, blank=True)
+    iban = models.CharField(max_length=35, blank=True)
+    bic = models.CharField(max_length=20, blank=True)
+
+    date_of_arrival = models.DateTimeField(blank=True, null=True)
+    transport_arrival = models.BooleanField(default=False)
+    location_of_arrival = models.CharField(max_length=130, blank=True)
+    terminal_of_arrival = models.CharField(max_length=130, blank=True)
+
+    date_of_departure = models.DateTimeField(blank=True, null=True)
+    transport_departure = models.BooleanField(default=False)
+    location_of_departure = models.CharField(max_length=130, blank=True)
+    terminal_of_departure = models.CharField(max_length=130, blank=True)
+
+    notes_tranpsort = models.TextField(blank=True)
 
 
-class Correpetitor(models.Model):
+class Correpetitor(PersonBase):
     pass
 
 
@@ -95,20 +139,16 @@ def generate_secret_id():
     return secrets.token_hex(4)
 
 
-class Inscription(models.Model):
+class Inscription(PersonBase):
     uid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     secret_id = models.CharField(max_length=8, default=generate_secret_id, unique=True)
     instrument = models.ForeignKey(Instrument, models.CASCADE, verbose_name=_("instrument"))
 
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, verbose_name=_("gender"))
-    given_name = models.CharField(max_length=120, verbose_name=_("given name"))
-    surname = models.CharField(max_length=120, verbose_name=_("surname"))
 
     date_of_birth = models.DateField(verbose_name=_("date of birth"))
 
     nationality = CountryField(verbose_name=_("nationality"))
-
-    address = AddressField(verbose_name=_("address"))
 
     mother_tongue = models.CharField(max_length=120, verbose_name=_("language"))
     language_of_correspondence = models.CharField(
@@ -117,24 +157,13 @@ class Inscription(models.Model):
         verbose_name=_("language of correspondence"),
     )
 
-    phone = PhoneNumberField(
-        verbose_name=_("phone"),
-        help_text=_("please remember to add your country prefix"),
-    )
-    email = models.EmailField(
-        verbose_name=_("e-mail"),
-        unique=True,
-        error_messages={'unique': _("This email has already been registered.")},
-        help_text=_(
-            "make sure your e-mail is correct, as all communication will be done over e-mail"))
-
     education = models.TextField(max_length=500, verbose_name=_("artistic CV"))
     occupation = models.CharField(max_length=60, verbose_name=_("occupation"))
     notes = models.TextField(
         blank=True,
         verbose_name=_("notes"),
         help_text=_(
-            "any information that we should know beforhand, not mentioned otherwise in this form"),
+            "any information that we should know beforehand, not mentioned otherwise in this form"),
     )
 
     emergency_contact = models.CharField(
@@ -162,8 +191,6 @@ class Inscription(models.Model):
 
     allergies = models.CharField(max_length=120, blank=True, verbose_name=_("allergies"))
 
-    submitted_at = models.DateTimeField(auto_now_add=True, verbose_name=_("submitted"))
-
     host_family = models.ForeignKey(
         "HostFamily",
         on_delete=models.SET_NULL,
@@ -171,7 +198,8 @@ class Inscription(models.Model):
         blank=True,
     )
 
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    has_documents = models.BooleanField(default=False)
+    has_recordings = models.BooleanField(default=False)
 
     passport = models.FileField(blank=True, upload_to='documents/')
     photo = models.ImageField(blank=True, upload_to='photos/')
@@ -181,9 +209,6 @@ class Inscription(models.Model):
 
     def total_recordings(self):
         return RequiredRecording.objects.filter(instrument=self.instrument).count()
-
-    def __str__(self):
-        return f'{self.given_name} {self.surname}'
 
     def todos(self):
         todos = []
@@ -202,37 +227,93 @@ class Inscription(models.Model):
         return reverse('tmc:inscription_detail', kwargs=dict(pk=self.pk))
 
 
-class HostFamily(models.Model):
-    given_name = models.CharField(max_length=200)
-    surname = models.CharField(max_length=200)
-    address = AddressField()
+class HostFamily(PersonBase):
 
-    phone = PhoneNumberField()
-    mobile = PhoneNumberField()
+    single_rooms = models.PositiveSmallIntegerField(verbose_name=_("no of single rooms"))
+    double_rooms = models.PositiveSmallIntegerField(verbose_name=_("no of double rooms"))
 
-    email = models.EmailField()
+    provides_breakfast = models.BooleanField(verbose_name=_("breakfast"))
 
-    single_rooms = models.PositiveSmallIntegerField()
-    double_rooms = models.PositiveSmallIntegerField()
+    has_own_bathroom = models.BooleanField(verbose_name=_("own bathroom"))
+    has_wifi = models.BooleanField(verbose_name=_("wifi"))
+    provides_transport = models.BooleanField(
+        verbose_name=_("transport"),
+        help_text=_("do you provide transport for the contestants?"),
+    )
 
-    provides_breakfast = models.BooleanField()
+    preferred_gender = models.CharField(
+        max_length=5,
+        choices=GENDER_CHOICES,
+        blank=True,
+        verbose_name=_("preferred gender"),
+    )
 
-    has_own_bathroom = models.BooleanField()
-    has_wifi = models.BooleanField()
-    provides_transport = models.BooleanField()
+    languages = models.ManyToManyField(Language, verbose_name=_("languages"))
 
-    preferred_gender = models.CharField(max_length=5, choices=GENDER_CHOICES, blank=True)
+    pets = models.CharField(
+        blank=True,
+        max_length=180,
+        verbose_name=_("pets"),
+        help_text=_("do you have pets and if yes what kind?"),
+    )
+    practice_allowed = models.BooleanField(
+        verbose_name=_("practice_allowed"),
+        help_text=_("are contestants allowed to practice?"),
+    )
+    practice_notes = models.CharField(
+        blank=True,
+        max_length=180,
+        verbose_name=_("practice notes"),
+        help_text=_("are there any restrictions for practicing? Time, duration, ..."),
+    )
 
-    languages = models.ManyToManyField(Language)
-
-    pets = models.CharField(blank=True, max_length=180)
-    practice_allowed = models.BooleanField()
-    practice_notes = models.CharField(blank=True, max_length=180)
-
-    smoking_allowed = models.BooleanField()
-    notes = models.TextField(blank=True)
-
-    submitted_at = models.DateTimeField()
+    smoking_allowed = models.BooleanField(verbose_name=_("smokers allowed"))
+    notes = models.TextField(blank=True, verbose_name=_("notes"))
 
     def __str__(self):
         return f'{self.given_name} {self.surname}'
+
+    def get_absolute_url(self):
+        return reverse('tmc:host_detail', kwargs=dict(pk=self.pk))
+
+
+class Ressort(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+class DateSlot(models.Model):
+    date = models.DateField()
+    note = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.note
+
+
+class TimeSlot(models.Model):
+    helper = models.ForeignKey("Helper", models.CASCADE)
+    date = models.ForeignKey(DateSlot, models.CASCADE)
+
+    SLOTS = (
+        ('morning', _("Morning")),
+        ('afternoon', _("Afternoon")),
+        ('evening', _("Evening")),
+        ('whole_day', _("Whole Day")),
+    )
+    slot = models.CharField(max_length=60, choices=SLOTS)
+
+    def __str__(self):
+        return str(self.helper)
+
+
+class Helper(PersonBase):
+    slots = models.ManyToManyField(DateSlot, through=TimeSlot)
+    languages = models.ManyToManyField(Language)
+
+    ressorts = models.ManyToManyField(Ressort)
+    other_ressorts = models.CharField(max_length=200, blank=True)
+
+    is_spontaneous = models.BooleanField()
+    notes = models.TextField(blank=True)

@@ -211,15 +211,45 @@ With this link you can also upload the required recordings, instructions on how 
 Best wishes and good luck
 
 The TMC Team!""", 'content of e-mail sent to participants.'),
-    'AUTH_SUBJECT': ('Your TMC login', 'subject of e-mail with login link'),
-    'AUTH_TEXT': ("""Dear {inscription.given_name},
+    'AUTH_SUBJECT': ('Your TMC login | Dein TMC Zugang', 'subject of e-mail with login link'),
+    'AUTH_TEXT': ("""**Für Deutsch: siehe unten**
+
+Dear {inscription.first_name},
 
 Click on this link to login to your TMC account: {auth_link}.\nIf did not try login, please ignore this message.
 
 Do not forward this message, as anyone with the link above will be able to access your personal account and change your details.
 
 Best wishes, The TMC Team.
-""", 'text sent to people login in')
+
+***********************
+
+Liebe*r {inscription.first_name},
+
+Klicke auf diesen Link um dich beim TMC Portal anzumelden: {auth_link}\nWenn du dich nicht anmelden wolltest, kannst du diese Nachricht ignorieren.
+
+Leite diese Nachricht niemandem weiter, mit dem obigen Link können deine persönlichen Daten eingesehen und bearbeitet werden.
+
+Liebe Grüsse, das TMC Team
+""", 'text sent to people login in'),
+    'HOST_SIGNUP_TEXT': ("""Hallo {inscription.given_name} {inscription.surname}
+
+Danke für deine Anmeldung als Gastfamilie für The Muri Competition. Du kannst deine Angaben jederzeit mit diesem Link anpassen: {auth_link}.\n\n Liebe Grüsse, das TMC Team""",
+                         'nachricht für Gastfamlien'),
+    'HOST_SIGNUP_SUBJECT': (
+        "Anmeldung als Gastfamilie TMC",
+        "Betreff für Gastfamilie",
+    ),
+    'JURY_SIGNUP_TEXT':
+    ("Registration Jury TMC", "text sent to jury members after account is created"),
+    'JURY_SIGNUP_SUBJECT':
+    ("Hi {inscription.given_name}\n\nYou receive this message, because you are now registered as a member of the jury for the Muri Competition. You can access your account and upate your info using this link: {auth_link}\n\nBest wishes, the TMC Team",
+     'subject of mail sent to new jury members'),
+    'HELPER_SIGNUP_SUBJECT':
+    ("Anmeldung als Helfer beim TMC", 'subject of mail sent to new helpers'),
+    'HELPER_SIGNUP_TEXT':
+    ("Hallo {inscription.given_name}\nDu erhältst dieses E-Mail, da du dich als Helfer für den TMC angemeldet hast. Du kannst deine Informationen jederzeit hier einsehen und bearbeiten: {auth_link}\n\nLiebe Grüsse, das TMC Team",
+     'text sent to helpers after signup'),
 }
 
 Q_CLUSTER = {
