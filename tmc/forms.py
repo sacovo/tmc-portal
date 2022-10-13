@@ -1,4 +1,4 @@
-from crispy_forms.layout import Submit
+from crispy_forms.layout import HTML, Fieldset, Layout, Submit
 from django.contrib.auth import get_user_model
 from django import forms
 from django.core.exceptions import ValidationError
@@ -145,6 +145,7 @@ class HelperForm(forms.ModelForm, UserSignupMixin):
             'email',
             'notes',
             'languages',
+            'other_languages',
             'ressorts',
             'other_ressorts',
             'is_spontaneous',
@@ -186,13 +187,13 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
             'email',
             'notes',
             'instrument',
+            'kind',
             'date_of_birth',
             'ahv_number',
-            'city_of_departure',
-            'means_of_travel',
             'payee',
             'iban',
             'bic',
+            'means_of_travel',
             'date_of_arrival',
             'transport_arrival',
             'location_of_arrival',
@@ -206,6 +207,8 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
 
         widgets = {
             'date_of_birth': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'date_of_arrival': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'date_of_departure': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
         }
 
     def __init__(self, *args, **kwargs):
@@ -215,3 +218,38 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
         self.helper.form_method = "post"
         self.helper.form_action = ""
         self.helper.add_input(Submit("submit", _("Submit")))
+        self.helper.layout = Layout(
+            Fieldset(
+                _("This is a legend"),
+                'given_name',
+                'surname',
+                'address',
+                'phone',
+                'email',
+                'notes',
+                'instrument',
+                'date_of_birth',
+                'ahv_number',
+            ),
+            HTML('<hr/>'),
+            Fieldset(
+                _("Bank information"),
+                'payee',
+                'iban',
+                'bic',
+            ),
+            HTML('<hr/>'),
+            Fieldset(
+                _("Travel information"),
+                'means_of_travel',
+                'date_of_arrival',
+                'transport_arrival',
+                'location_of_arrival',
+                'terminal_of_arrival',
+                'date_of_departure',
+                'transport_departure',
+                'location_of_departure',
+                'terminal_of_departure',
+                'notes_tranpsort',
+            ),
+        )

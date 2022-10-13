@@ -1,5 +1,5 @@
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.forms import inlineformset_factory
@@ -273,6 +273,7 @@ def view_helper(request, pk):
     )
 
 
+@user_passes_test(lambda u: u.is_staff)
 def jury_signup(request):
     form = JuryForm()
 
@@ -280,7 +281,6 @@ def jury_signup(request):
         form = JuryForm(request.POST)
         if form.is_valid():
             instance = process_jury_signup(form, request)
-            login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
             return redirect('tmc:jury_detail', pk=instance.pk)
     return render(request, 'tmc/jury_form.html', {'form': form})
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-07 18:03+0200\n"
+"POT-Creation-Date: 2022-10-13 20:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,17 +38,38 @@ msgstr "Italienisch"
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: tmc/forms.py:49 tmc/forms.py:64
+#: tmc/admin.py:46
+msgid "Check for recordings and documents"
+msgstr ""
+
+#: tmc/forms.py:64 tmc/forms.py:79 tmc/forms.py:133 tmc/forms.py:175
+#: tmc/forms.py:220
 msgid "Submit"
 msgstr "Absenden"
 
-#: tmc/forms.py:75
+#: tmc/forms.py:90
 msgid "This e-mail is not registered."
 msgstr "Diese E-Mail Adresse ist nicht registriert"
 
-#: tmc/forms.py:84 tmc/templates/tmc/login.html:4
+#: tmc/forms.py:100 tmc/templates/tmc/login.html:4
 msgid "Login"
 msgstr "Anmelden"
+
+#: tmc/forms.py:223
+msgid "This is a legend"
+msgstr ""
+
+#: tmc/forms.py:236
+#, fuzzy
+#| msgid "Update information"
+msgid "Bank information"
+msgstr "Informationen aktualisieren"
+
+#: tmc/forms.py:243
+#, fuzzy
+#| msgid "Update information"
+msgid "Travel information"
+msgstr "Informationen aktualisieren"
 
 #: tmc/models.py:20
 msgid "Female"
@@ -66,59 +87,35 @@ msgstr "Non-Binär"
 msgid "Don't know"
 msgstr "Weiss nicht"
 
-#: tmc/models.py:101
-msgid "instrument"
-msgstr "Instrument"
-
-#: tmc/models.py:103
-msgid "gender"
-msgstr "Gender"
-
-#: tmc/models.py:104
+#: tmc/models.py:51
 msgid "given name"
 msgstr "Vorname"
 
-#: tmc/models.py:105
+#: tmc/models.py:52
 msgid "surname"
 msgstr "Name"
 
-#: tmc/models.py:107
-msgid "date of birth"
-msgstr "Geburtsdatum"
-
-#: tmc/models.py:109
-msgid "nationality"
-msgstr "Nationalität"
-
-#: tmc/models.py:111
+#: tmc/models.py:54
 msgid "address"
 msgstr "Adresse"
 
-#: tmc/models.py:113
-msgid "language"
-msgstr "Sprache"
-
-#: tmc/models.py:117
-msgid "language of correspondence"
-msgstr "Korrespondenzsprache"
-
-#: tmc/models.py:121
+#: tmc/models.py:56
 msgid "phone"
 msgstr "Handy"
 
-#: tmc/models.py:122
+#: tmc/models.py:57
 msgid "please remember to add your country prefix"
 msgstr "Bitte vergiss die Ländervorwahl nicht!"
 
-#: tmc/models.py:125
+#: tmc/models.py:60
 msgid "e-mail"
 msgstr "E-Mail"
 
-#: tmc/models.py:127
+#: tmc/models.py:62
 msgid "This email has already been registered."
 msgstr "Diese E-Mail Adresse ist bereits registriert."
 
-#: tmc/models.py:129
+#: tmc/models.py:64
 msgid ""
 "make sure your e-mail is correct, as all communication will be done over e-"
 "mail"
@@ -126,124 +123,409 @@ msgstr ""
 "Stelle sicher, dass deine E-Mail Adresse korrekt ist, da alle Kommunikation "
 "über sie erfolgen wird."
 
-#: tmc/models.py:131
-msgid "artistic CV"
-msgstr ""
-
-#: tmc/models.py:132
-msgid "occupation"
-msgstr "Beschäftigung"
-
-#: tmc/models.py:135
-msgid "notes"
-msgstr "Notizen"
-
-#: tmc/models.py:137
-msgid ""
-"any information that we should know beforhand, not mentioned otherwise in "
-"this form"
-msgstr "Gibt es sonst nocht etwas, das wir wissen müssen?"
-
-#: tmc/models.py:142
-msgid "emergency contact"
-msgstr "Notfallkontakt"
-
-#: tmc/models.py:143
-msgid "name of your emergency contact"
-msgstr "Name des Notfallkontakts"
-
-#: tmc/models.py:146
-msgid "emergency phone"
-msgstr "Notfallkontakt Telefon"
-
-#: tmc/models.py:147
-msgid "phone number of your emergency contact"
-msgstr "Telefonnummer deines Notfallkontakts"
-
-#: tmc/models.py:152
-msgid "emergency relation"
-msgstr "Notfallkontakt Beziehung"
-
-#: tmc/models.py:153
-msgid "how are you related to your emergency contact, (family, friends, ...)"
-msgstr "In welcher Beziehung stehst du zu deinem Notfallkontakt"
-
-#: tmc/models.py:157
-msgid "accomodation needed"
-msgstr "Unterkunft benötigt"
-
-#: tmc/models.py:158
-msgid "do you need us to organise accomodation?"
-msgstr "Sollen wir für dich eine Unterkunft organisieren?"
-
-#: tmc/models.py:159
-msgid "smoker"
-msgstr "Raucher*in"
-
-#: tmc/models.py:160
-msgid "need food"
-msgstr "Essen benötigt"
-
-#: tmc/models.py:161
-msgid "vegetarian"
-msgstr "Vegetarisch"
-
-#: tmc/models.py:163
-msgid "allergies"
-msgstr "Allergien"
-
-#: tmc/models.py:165
+#: tmc/models.py:65
 msgid "submitted"
 msgstr "Abgeschickt"
 
-#: tmc/models.py:192
+#: tmc/models.py:74 tmc/models.py:164
+msgid "instrument"
+msgstr "Instrument"
+
+#: tmc/models.py:75
+msgid "kind"
+msgstr ""
+
+#: tmc/models.py:77 tmc/models.py:168
+msgid "date of birth"
+msgstr "Geburtsdatum"
+
+#: tmc/models.py:78
+msgid "ahv number"
+msgstr "AHV Nummer"
+
+#: tmc/models.py:79 tmc/models.py:183 tmc/models.py:299 tmc/models.py:351
+msgid "notes"
+msgstr "Notizen"
+
+#: tmc/models.py:83
+msgid "payee"
+msgstr "Empfänger"
+
+#: tmc/models.py:84
+msgid "name of the person receiving the payment"
+msgstr "Name der Person, die die Zahlung erhält"
+
+#: tmc/models.py:85
+msgid "IBAN"
+msgstr "IBAN"
+
+#: tmc/models.py:86
+msgid "BIC"
+msgstr "BIC"
+
+#: tmc/models.py:90
+msgid "means of travel"
+msgstr "Transportmittel"
+
+#: tmc/models.py:92
+msgid "date of arrival"
+msgstr "Ankunftsdatum"
+
+#: tmc/models.py:94
+msgid "need transport on arrival"
+msgstr "Transport benötigt bei der Ankunft"
+
+#: tmc/models.py:95
+msgid "do you need transport on arrival?"
+msgstr "Brauchen Sie Transport bei Ihrer Ankunft?"
+
+#: tmc/models.py:98
+msgid "location of arrival"
+msgstr "Ankunftsort"
+
+#: tmc/models.py:101
+msgid "terminal of arrival"
+msgstr "Ankunftsterminal"
+
+#: tmc/models.py:105
+msgid "date of departure"
+msgstr "Abreisedatum"
+
+#: tmc/models.py:107
+msgid "need transport on departure"
+msgstr "Transport benötigt bei der Abreise"
+
+#: tmc/models.py:110
+msgid "location of departure"
+msgstr "Abreisort"
+
+#: tmc/models.py:113
+msgid "terminal of departuree"
+msgstr "Abreiseterminal"
+
+#: tmc/models.py:115
+msgid "notes on transport"
+msgstr "Notizen für den Transport"
+
+#: tmc/models.py:166
+msgid "gender"
+msgstr "Gender"
+
+#: tmc/models.py:170
+msgid "nationality"
+msgstr "Nationalität"
+
+#: tmc/models.py:172
+msgid "language"
+msgstr "Sprache"
+
+#: tmc/models.py:176
+msgid "language of correspondence"
+msgstr "Korrespondenzsprache"
+
+#: tmc/models.py:179
+msgid "artistic CV"
+msgstr "künstlerischer CV"
+
+#: tmc/models.py:180
+msgid "occupation"
+msgstr "Beschäftigung"
+
+#: tmc/models.py:185
+msgid ""
+"any information that we should know beforehand, not mentioned otherwise in "
+"this form"
+msgstr "Gibt es sonst nocht etwas, das wir wissen müssen?"
+
+#: tmc/models.py:190
+msgid "emergency contact"
+msgstr "Notfallkontakt"
+
+#: tmc/models.py:191
+msgid "name of your emergency contact"
+msgstr "Name des Notfallkontakts"
+
+#: tmc/models.py:194
+msgid "emergency phone"
+msgstr "Notfallkontakt Telefon"
+
+#: tmc/models.py:195
+msgid "phone number of your emergency contact"
+msgstr "Telefonnummer deines Notfallkontakts"
+
+#: tmc/models.py:200
+msgid "emergency relation"
+msgstr "Notfallkontakt Beziehung"
+
+#: tmc/models.py:201
+msgid "how are you related to your emergency contact, (family, friends, ...)"
+msgstr "In welcher Beziehung stehst du zu deinem Notfallkontakt"
+
+#: tmc/models.py:205
+msgid "accomodation needed"
+msgstr "Unterkunft benötigt"
+
+#: tmc/models.py:206
+msgid "do you need us to organise accomodation?"
+msgstr "Sollen wir für dich eine Unterkunft organisieren?"
+
+#: tmc/models.py:207
+msgid "smoker"
+msgstr "Raucher*in"
+
+#: tmc/models.py:208
+msgid "need food"
+msgstr "Essen benötigt"
+
+#: tmc/models.py:209
+msgid "vegetarian"
+msgstr "Vegetarisch"
+
+#: tmc/models.py:211
+msgid "allergies"
+msgstr "Allergien"
+
+#: tmc/models.py:236
 msgid "Upload required recordings"
 msgstr "Erforderliche Aufnahmen hochladen"
 
-#: tmc/models.py:195
+#: tmc/models.py:239
 msgid "Upload scan of your passport"
 msgstr "Einen Scan deines Passes hochladen"
 
-#: tmc/models.py:197
+#: tmc/models.py:241
 msgid "Upload a photo of yourself"
 msgstr "Ein Photo von dir hochladen"
 
+#: tmc/models.py:252
+msgid "no of single rooms"
+msgstr "Anzahl Einzelzimmer"
+
+#: tmc/models.py:252
+msgid "how many single rooms can you provide?"
+msgstr "Wie viele Einzelzimmer können Sie zur Verfügung stellen?"
+
+#: tmc/models.py:254
+msgid "no of double rooms"
+msgstr "Anzahl Doppelzimmer"
+
+#: tmc/models.py:256
+msgid ""
+"how many rooms for two people can you provide? Below you can attach notes if "
+"necessary."
+msgstr "Wie viele Doppelzimmer können Sie zur Verfügung stellen?"
+"Unten können Sie Notizen anfügen, falls notwendig."
+
+#: tmc/models.py:259
+msgid "breakfast provided"
+msgstr "Frühstück"
+
+#: tmc/models.py:260
+msgid "can you provide breakfast?"
+msgstr "Können Sie Frühstück anbieten?"
+
+#: tmc/models.py:262
+msgid "own bathroom"
+msgstr "Eigenes Badezimmer"
+
+#: tmc/models.py:263
+msgid "do guests have their own bathroom?"
+msgstr "Haben die Gäste ein eigenes Badzimmer?"
+
+#: tmc/models.py:264
+msgid "wifi"
+msgstr "WiFi"
+
+#: tmc/models.py:264
+msgid "can guests use your wifi?"
+msgstr "Können Gäste das Wifi benutzen?"
+
+#: tmc/models.py:266
+msgid "transport"
+msgstr "Transport"
+
+#: tmc/models.py:267
+msgid "do you provide transport for the contestants?"
+msgstr "Können Sie die Teilnehmenden transportieren?"
+
+#: tmc/models.py:274
+msgid "preferred gender"
+msgstr "Bevorzugtes Gender"
+
+#: tmc/models.py:278 tmc/models.py:341
+msgid "languages"
+msgstr "Sprachen"
+
+#: tmc/models.py:279
+msgid "what languages do you speak?"
+msgstr "Was für Sprachen sprechen Sie?"
+
+#: tmc/models.py:284
+msgid "pets"
+msgstr "Haustiere"
+
+#: tmc/models.py:285
+msgid "do you have pets and if yes what kind?"
+msgstr "Haben Sie Hautiere und wenn ja, welche?"
+
+#: tmc/models.py:288
+msgid "practice_allowed"
+msgstr "Üben erlaubt"
+
+#: tmc/models.py:289
+msgid "are contestants allowed to practice?"
+msgstr "Können Teilnehmende üben?"
+
+#: tmc/models.py:294
+msgid "practice notes"
+msgstr "Notizen zum Üben"
+
+#: tmc/models.py:295
+msgid "are there any restrictions for practicing? Time, duration, ..."
+msgstr "Gibt es für das Üben irgendwelche Einschränkungen? Zeit, Dauer, ..."
+
+#: tmc/models.py:298
+msgid "smokers allowed"
+msgstr "Rauchen erlaubt"
+
+#: tmc/models.py:325
+msgid "datum"
+msgstr "Datum"
+
+#: tmc/models.py:328
+msgid "Morning"
+msgstr "Morgens"
+
+#: tmc/models.py:329
+msgid "Afternoon"
+msgstr "Nachmittags"
+
+#: tmc/models.py:330
+msgid "Evening"
+msgstr "Abends"
+
+#: tmc/models.py:331
+msgid "Whole Day"
+msgstr "Ganzer Tag"
+
+#: tmc/models.py:333
+msgid "slot"
+msgstr "Slot"
+
+#: tmc/models.py:340
+msgid "slots"
+msgstr "Slots"
+
+#: tmc/models.py:344
+msgid "other languages"
+msgstr "andere Sprachen"
+
+#: tmc/models.py:346
+msgid "ressorts"
+msgstr "Ressorts"
+
+#: tmc/models.py:347
+msgid "other ressorts"
+msgstr "andere Ressorts"
+
+#: tmc/models.py:349
+msgid "spontaneous?"
+msgstr "Spontane Einsätze?"
+
+#: tmc/models.py:350
+msgid "are you available spontaneously"
+msgstr "Kannst du spontan einspringen?"
+
 #: tmc/templates/base.html:13 tmc/templates/profile_base.html:54
+#: tmc/templates/tmc/host_base.html:54
 msgid "Privacy Policy"
 msgstr "Datenschutzerklärung"
 
 #: tmc/templates/base.html:14 tmc/templates/profile_base.html:55
+#: tmc/templates/tmc/host_base.html:55
 msgid "Impressum"
 msgstr "Impressum"
 
 #: tmc/templates/base.html:15 tmc/templates/profile_base.html:56
+#: tmc/templates/tmc/host_base.html:56
 msgid "Contact"
 msgstr "Kontakt"
 
-#: tmc/templates/profile_base.html:14
+#: tmc/templates/profile_base.html:14 tmc/templates/tmc/host_base.html:14
 msgid "Account"
 msgstr "Profil"
 
-#: tmc/templates/profile_base.html:17
+#: tmc/templates/profile_base.html:17 tmc/templates/tmc/host_base.html:17
 msgid "Update Account"
 msgstr "Profil bearbeiten"
 
-#: tmc/templates/profile_base.html:21 tmc/templates/tmc/recordings.html:5
-#: tmc/templates/tmc/recordings.html:8
+#: tmc/templates/profile_base.html:21 tmc/templates/tmc/host_base.html:21
+#: tmc/templates/tmc/recordings.html:5 tmc/templates/tmc/recordings.html:8
 msgid "Recordings"
 msgstr "Aufnahmen"
 
-#: tmc/templates/profile_base.html:29
+#: tmc/templates/profile_base.html:29 tmc/templates/tmc/host_base.html:29
 msgid "Documents"
 msgstr "Dokumente"
 
-#: tmc/templates/profile_base.html:36
+#: tmc/templates/profile_base.html:36 tmc/templates/tmc/host_base.html:36
 msgid "Admin"
 msgstr "Admin"
 
-#: tmc/templates/profile_base.html:40
+#: tmc/templates/profile_base.html:40 tmc/templates/tmc/host_base.html:40
 msgid "Logout"
 msgstr "Abmelden"
+
+#: tmc/templates/tmc/helper_form.html:5 tmc/templates/tmc/helper_form.html:8
+#: tmc/templates/tmc/host_form.html:4 tmc/templates/tmc/host_form.html:7
+#: tmc/templates/tmc/inscription_update.html:4
+#: tmc/templates/tmc/inscription_update.html:7
+#: tmc/templates/tmc/jury_form.html:4 tmc/templates/tmc/jury_form.html:7
+msgid "Update information"
+msgstr "Informationen aktualisieren"
+
+#: tmc/templates/tmc/helper_form.html:5 tmc/templates/tmc/helper_form.html:8
+msgid "Signup as helper"
+msgstr "Als Helfer anmelden"
+
+#: tmc/templates/tmc/helper_form.html:19 tmc/templates/tmc/host_form.html:18
+#: tmc/templates/tmc/inscription_update.html:12
+#: tmc/templates/tmc/jury_form.html:18
+msgid ""
+"You can update your information here. Be careful if you change your e-mail "
+"address, if you don't have access to your mail <em>you will not be able to "
+"access your information!</em>"
+msgstr ""
+"Hier kannst du deine Informationen aktualisieren. Pass auf, wenn du deine E-"
+"MailAdresse änderst. Wenn du keinen Zugriff auf deine E-Mail Adresse hast, "
+"<em>kannst dunicht mehr auf deine Informationen zugreifen!</em>"
+
+#: tmc/templates/tmc/helper_form.html:21
+msgid "Signup as helper using this form"
+msgstr "Melde dich als Helfer an mit diesem Formular"
+
+#: tmc/templates/tmc/helper_form.html:31 tmc/templates/tmc/host_form.html:26
+#: tmc/templates/tmc/inscription_documents.html:16
+#: tmc/templates/tmc/inscription_update.html:16
+#: tmc/templates/tmc/jury_form.html:26 tmc/templates/tmc/signup.html:21
+msgid ""
+"By sending this form you agree to the terms and conditions of the muri "
+"competition, as well as the processing of your personal details as stated in "
+"the privacy policy."
+msgstr ""
+"Mit dem Absenden dieses Formulars stimmst du den Bedingungen der Muri "
+"Competition zu und erklärst dich mit der Verarbeitung deiner Personendaten "
+"gemäss der Datenschutzerklärungeinverstanden."
+
+#: tmc/templates/tmc/host_form.html:4 tmc/templates/tmc/host_form.html:7
+#, fuzzy
+#| msgid "Signup"
+msgid "Signup as host"
+msgstr "Anmelden"
+
+#: tmc/templates/tmc/host_form.html:20
+msgid "Signup as host family using this form"
+msgstr "Als Gastfamilie anmelden über dieses Formular"
 
 #: tmc/templates/tmc/inscription_detail.html:4
 msgid "Your information"
@@ -274,32 +556,13 @@ msgstr "Dokumente hochladen"
 msgid "Upload the required documents until the 30th of November!"
 msgstr "Lade die benötigten Dokuemnte bis am 30. November hoch."
 
-#: tmc/templates/tmc/inscription_documents.html:16
-#: tmc/templates/tmc/inscription_update.html:16
-#: tmc/templates/tmc/signup.html:21
-msgid ""
-"By sending this form you agree to the terms and conditions of the muri "
-"competition, as well as the processing of your personal details as stated in "
-"the privacy policy."
-msgstr ""
-"Mit dem Absenden dieses Formulars stimmst du den Bedingungen der Muri "
-"Competition zu und erklärst dich mit der Verarbeitung deiner Personendaten "
-"gemäss der Datenschutzerklärungeinverstanden."
+#: tmc/templates/tmc/jury_form.html:4 tmc/templates/tmc/jury_form.html:7
+msgid "Signup as jury member"
+msgstr "Als Jury-Mitglied anmelden"
 
-#: tmc/templates/tmc/inscription_update.html:4
-#: tmc/templates/tmc/inscription_update.html:7
-msgid "Update information"
-msgstr "Informationen aktualisieren"
-
-#: tmc/templates/tmc/inscription_update.html:12
-msgid ""
-"You can update your information here. Be careful if you change your e-mail "
-"address, if you don't have access to your mail <em>you will not be able to "
-"access your information!</em>"
-msgstr ""
-"Hier kannst du deine Informationen aktualisieren. Pass auf, wenn du deine E-"
-"MailAdresse änderst. Wenn du keinen Zugriff auf deine E-Mail Adresse hast, "
-"<em>kannst dunicht mehr auf deine Informationen zugreifen!</em>"
+#: tmc/templates/tmc/jury_form.html:20
+msgid "Signup as jury member using this form"
+msgstr "In diesem Formular können Jury-Mitglieder angemeldet werden"
 
 #: tmc/templates/tmc/login.html:7
 msgid "TMC Login"
@@ -371,8 +634,9 @@ msgid ""
 "Young soloists born in or after 1993 are eligible to apply to the "
 "competition. A maximum of 50 participants per instrument will be admitted."
 msgstr ""
-"Junge Solist*innen geboren in oder nach 1993 können sich für den Wettbewerb anmelden. Jeweils max. 50"
-"Teilnehmende pro Instrument werden zum Wettbewerb zugelassen."
+"Junge Solist*innen geboren in oder nach 1993 können sich für den Wettbewerb "
+"anmelden. Jeweils max. 50Teilnehmende pro Instrument werden zum Wettbewerb "
+"zugelassen."
 
 #: tmc/templates/tmc/signup.html:18
 msgid "Already registered?"
@@ -381,3 +645,7 @@ msgstr "Bereits angemeldet?"
 #: tmc/templates/tmc/signup.html:18
 msgid "Login here"
 msgstr "Hier anmelden"
+
+#: tmc/views.py:206 tmc/views.py:300
+msgid "Your information was updated"
+msgstr "Deine Information wurde aktualisiert"
