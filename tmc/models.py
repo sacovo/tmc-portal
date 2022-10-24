@@ -84,6 +84,7 @@ class JuryMember(PersonBase):
                              help_text=_("name of the person receiving the payment"))
     iban = models.CharField(max_length=35, blank=True, verbose_name=_("IBAN"))
     bic = models.CharField(max_length=20, blank=True, verbose_name=_("BIC"))
+    bank_info = models.CharField(max_length=280, blank=True, verbose_name=_("bank info"))
 
     means_of_travel = models.CharField(max_length=120,
                                        blank=True,
