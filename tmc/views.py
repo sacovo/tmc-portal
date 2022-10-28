@@ -59,6 +59,9 @@ def landing(request):
     if hasattr(user, 'helper'):
         return redirect('tmc:helper_detail', pk=user.helper.pk)
 
+    if hasattr(user, 'jury'):
+        return redirect('tmc:jury_detail', pk=user.jury.pk)
+
     return redirect('tmc:signup')
 
 

@@ -220,7 +220,7 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
         self.helper.add_input(Submit("submit", _("Submit")))
         self.helper.layout = Layout(
             Fieldset(
-                _("This is a legend"),
+                _("Enter your information"),
                 'given_name',
                 'surname',
                 'address',
