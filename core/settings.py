@@ -282,3 +282,5 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_URL = 'tmc:login'
+
+AWS_S3_FILE_OVERWRITE = False
