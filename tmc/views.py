@@ -13,6 +13,7 @@ from django_drf_filepond.api import (
     get_stored_upload_file_data,
     store_upload,
 )
+from django_q.tasks import async_task
 
 from tmc.forms import (
     DocumentForm,
@@ -145,6 +146,7 @@ def recordings(request, pk):
     })
 
 
+
 @login_required
 def upload_recording(request, inscription_pk, requirement_pk):
     requirement = get_object_or_404(RequiredRecording, pk=requirement_pk)
@@ -156,13 +158,18 @@ def upload_recording(request, inscription_pk, requirement_pk):
     upload_id = request.POST['upload_id']
     path = f"{requirement.nr:02}_{requirement.slug}_{upload_id}.{extension}"
 
+    async_task(store_uploaded_recording, upload_id, path, recording)
+
+    return HttpResponse('ok')
+
+def store_uploaded_recording(upload_id, path, recording):
     store_upload(upload_id, path)
     name, upload = get_stored_upload_file_data(get_stored_upload(upload_id))
 
     recording.recording.save(name, ContentFile(upload))
+    recording.is_complete = True
     recording.save()
     delete_stored_upload(upload_id, delete_file=True)
-    return HttpResponse(recording.recording.url)
 
 
 def signup(request):
@@ -276,6 +283,7 @@ def view_helper(request, pk):
     )
 
 
+@login_required
 @user_passes_test(lambda u: u.is_staff)
 def jury_signup(request):
     form = JuryForm()

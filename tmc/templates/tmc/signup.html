@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags i18n %}
-
-{% block document_title %}{% trans "Signup" %}{% endblock document_title %}
-
+{% block document_title %}
+    {% trans "Signup" %}
+{% endblock document_title %}
 {% block title %}
-  <h1>{% trans "TMC Signup" %}</h1>
+    <h1>{% trans "TMC Signup" %}</h1>
 {% endblock title %}
-
 {% block content %}
-  <p>
-    {% blocktrans %}Register now for the muri competition, deadline for your application is the 15th of november 2022.{% endblocktrans %}
-  </p>
-  <h2>{% trans "Terms of application" %}</h2>
-  <p>
-    {% trans "Young soloists born in or after 1993 are eligible to apply to the competition. A maximum of 50 participants per instrument will be admitted." %}
-  </p>
-  <p>{% blocktrans %}Already registered?{% endblocktrans %} <a href="{% url 'tmc:login' %}">{% trans 'Login here' %}</a></p>
-  {% crispy form %}
-  <p>
-    {% blocktrans %}By sending this form you agree to the terms and conditions of the muri competition, as well as the processing of your personal details as stated in the privacy policy.{% endblocktrans %}
-  </p>
+    <p>
+        {% blocktrans %}Register now for the muri competition, deadline for your application is the 15th of november 2022.{% endblocktrans %}
+    </p>
+    <h2>{% trans "Terms of application" %}</h2>
+    <p>
+        {% trans "Young soloists born in or after 1993 are eligible to apply to the competition. A maximum of 50 participants per instrument will be admitted." %}
+    </p>
+    <p>
+        {% blocktrans %}Already registered?{% endblocktrans %} <a href="{% url 'tmc:login' %}">{% trans 'Login here' %}</a>
+    </p>
+    {% crispy form %}
+    <p>
+        {% blocktrans %}By sending this form you agree to the terms and conditions of the muri competition, as well as the processing of your personal details as stated in the privacy policy.{% endblocktrans %}
+    </p>
 {% endblock content %}
