@@ -255,9 +255,9 @@ Danke für deine Anmeldung als Gastfamilie für The Muri Competition. Du kannst 
 Q_CLUSTER = {
     'name': 'DjangORM',
     'workers': 8, # Workers do mostly network stuff
-    'timeout': 20 * 60,
-    'retry': 30 * 60,
-    'queue_limit': 150,
+    'timeout': 2 * 60 * 60,
+    'retry': 3 * 60 * 60,
+    'queue_limit': 5000,
     'bulk': 10,
     'orm': 'default'
 }
