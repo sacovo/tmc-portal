@@ -19,6 +19,5 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('fp/', include('django_drf_filepond.urls')),
     path('', include('tmc.urls')),
 ]

@@ -1,18 +1,16 @@
 from django.contrib.auth import login
+import boto3
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.http import require_POST
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.forms import inlineformset_factory
+from django.http import JsonResponse
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls.base import reverse
 from django.utils.translation import gettext as _
-from django_drf_filepond.api import (
-    delete_stored_upload,
-    get_stored_upload,
-    get_stored_upload_file_data,
-    store_upload,
-)
 from django_q.tasks import async_task
 
 from tmc.forms import (
@@ -146,30 +144,56 @@ def recordings(request, pk):
     })
 
 
-
+@require_POST
 @login_required
-def upload_recording(request, inscription_pk, requirement_pk):
+def signed_upload_url(request, inscription_pk, requirement_pk):
+    session = boto3.Session()
+
+    requirement = get_object_or_404(RequiredRecording, pk=requirement_pk)
+
+    instance = fetch_inscription(inscription_pk, request.user)
+    extension = request.POST['extension']
+
+    client = session.client(
+        "s3",
+        region_name=settings.AWS_S3_REGION_NAME,
+        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+        aws_access_key_id=settings.AWS_S3_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_S3_SECRET_ACCESS_KEY,
+    )
+    name = f"{requirement.nr:02}_{requirement.slug}.{extension}"
+
+    path = f'{instance.uid}/recordings/{name}'
+
+    url = client.generate_presigned_url(
+        ClientMethod="put_object",
+        Params={
+            "Bucket": settings.AWS_STORAGE_BUCKET_NAME,
+            "Key": path,
+        },
+        ExpiresIn=60 * 30,
+    )
+
+    return JsonResponse({'url': url})
+
+
+@require_POST
+@login_required
+def upload_completed(request, inscription_pk, requirement_pk):
     requirement = get_object_or_404(RequiredRecording, pk=requirement_pk)
     instance = fetch_inscription(inscription_pk, request.user)
+    extension = request.POST['extension']
 
     recording, _ = Recording.objects.get_or_create(uploader=instance, requirement=requirement)
+    name = f"{requirement.nr:02}_{requirement.slug}.{extension}"
 
-    extension = request.POST['extension']
-    upload_id = request.POST['upload_id']
-    path = f"{requirement.nr:02}_{requirement.slug}_{upload_id}.{extension}"
+    path = f'{instance.uid}/recordings/{name}'
 
-    async_task(store_uploaded_recording, upload_id, path, recording)
-
-    return HttpResponse('ok')
-
-def store_uploaded_recording(upload_id, path, recording):
-    store_upload(upload_id, path)
-    name, upload = get_stored_upload_file_data(get_stored_upload(upload_id))
-
-    recording.recording.save(name, ContentFile(upload))
+    recording.recording = path
     recording.is_complete = True
     recording.save()
-    delete_stored_upload(upload_id, delete_file=True)
+
+    return JsonResponse({'url': recording.recording.url})
 
 
 def signup(request):

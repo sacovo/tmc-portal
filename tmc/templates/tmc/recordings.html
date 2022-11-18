@@ -1,109 +1,149 @@
 {% extends "profile_base.html" %}
 {% load crispy_forms_tags i18n %}
 {% block document_title %}
-{% trans "Recordings" %}
+    {% trans "Recordings" %}
 {% endblock document_title %}
 {% block title %}
-<h1>{% trans "Recordings" %}</h1>
+    <h1>{% trans "Recordings" %}</h1>
 {% endblock title %}
 {% block extra_style %}
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
-<link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet" />
-<style>
-.filepond--credits {
-  display: none;
-}
-</style>
+    <link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet" />
+    <style>
+        .filepond--credits {
+            display: none;
+        }
+    </style>
 {% endblock extra_style %}
 {% block content %}
-<p>{% trans "Here you can upload your recordings for the required pieces." %}</p>
-<p>
-  {% trans "Your recording must be in the mp4 format. Please convert your video to one of these types before uploading!Your recordings are not allowed to be cut." %}
-</p>
-<div class="row">
-  {% for requirement in requirements %}
-  <div class="col-md-6">
-    <div class="card m-2">
-      <div class="card-body">
-        <h5 class="card-title">{{ requirement.name }}</h5>
-        {% if requirement.recording %}
-        <h6 class="card-subtitle mb-2 text-muted">
-          {% trans "You have uploaded a recording." %}
-          {% if not requirement.recording.is_complete %}
-          {% trans "We are still processing it, check back later to view your recording." %}
-          {% endif %}
-        </h6>
-        {% else %}
-        <h6 class="card-subtitle mb-2 text-muted">{% trans "You still need to upload a recording" %}</h6>
-        {% endif %}
-        <video id="player_{{ requirement.pk }}"
-               class="video-js"
-               controls
-               {% if requirement.recording %} preload="auto" {% else %} preload="none" poster="https://via.placeholder.com/1280x720.png?text={% trans "Upload+your+video+below" %}" {% endif %}
-                                                                                       width="1280"
-                                                                                       height="720"
-                                                                                       data-setup='{"fluid": true}'>
-          {% if requirement.recording.is_complete %}<source src="{{ requirement.recording.recording.url }}" />{% endif %}
-        </video>
-        <input type="file"
-               data-requirement="{{ requirement.pk }}"
-               accept=".mov,.mp4,.mkv,.wav"/>
-      </div>
-    </div>
+    <p>{% trans "Here you can upload your recordings for the required pieces." %}</p>
+    <p>
+        {% trans "Your recording must be in the mp4 format. Please convert your video to one of these types before uploading!Your recordings are not allowed to be cut." %}
+    </p>
+    <div class="row">
+        {% for requirement in requirements %}
+            <div class="col-md-6">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ requirement.name }}</h5>
+                        {% if requirement.recording %}
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {% trans "You have uploaded a recording." %}
+                                {% if not requirement.recording.is_complete %}
+                                    {% trans "We are still processing it, check back later to view your recording." %}
+                                {% endif %}
+                            </h6>
+                        {% else %}
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "You still need to upload a recording" %}</h6>
+                        {% endif %}
+                        <video id="player_{{ requirement.pk }}"
+                            class="video-js"
+                            controls
+                            {% if requirement.recording %} preload="auto" {% else %} preload="none" poster="https://via.placeholder.com/1280x720.png?text={% trans "Upload+your+video+below" %}" {% endif %}
+                            width="1280"
+                            height="720"
+                            data-setup='{"fluid": true}'>
+                            {% if requirement.recording.is_complete %}<source src="{{ requirement.recording.recording.url }}" />{% endif %}
+                        </video>
+                        <form class="d-flex align-items-center justify-content-between upload my-2"
+                            data-upload-url="{% url 'tmc:upload_recording_url' instance.pk requirement.pk %}"
+                            data-done-url="{% url 'tmc:upload_recording_done' instance.pk requirement.pk %}"
+                            data-requirement="{{ requirement.pk }}">
+                            <div class="input-group">
+                            <input type="file"
+                                name="file"
+                                class="form-control"
+                                accept=".mov,.mp4,.mkv,.wav,.webm"/>
+  <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Upload</button>
   </div>
-  {% endfor %}
-</div>
+                            </div>
+                        </form>
+                        <div class="progress d-none" id="progress_{{ requirement.pk }}">
+                            <div class="progress-bar" role="progressbar" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}
 {% block extra_script %}
-<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-<script src="https://vjs.zencdn.net/7.19.2/video.min.js"></script>
-<script>
-  const inscriptionPk = "{{instance.pk}}";
-  const inputElements = document.querySelectorAll('input[type="file"]');
+    <script src="https://vjs.zencdn.net/7.19.2/video.min.js"></script>
+    <script type="module">
+        const inscriptionPk = "{{instance.pk}}";
+        const uploadForms = document.querySelectorAll('form.upload');
 
-  FilePond.setOptions({
-    instantUpload: false,
-    chunkUploads: true,
-    server: {
-      url: '/fp',
-      process: '/process/',
-      patch: '/patch/',
-      revert: '/revert/',
-      fetch: '/fetch/?target=',
-      load: '/load/',
-    },
-    beforeAddFile: (item) => {
-      const extension = item.fileExtension;
-      return ['mp4', 'wav', 'mov', 'mkv'].includes(extension.toLowerCase());
-    },
-  });
+        const csrf_token = "{{csrf_token}}";
+        const getSignedUrl = async (form) => {
+            const extension = new FormData(form).get('file').name.split('.').at(-1);
+            const data = new FormData();
+            data.set('extension', extension);
+            data.set('csrfmiddlewaretoken', csrf_token);
+            const response = await fetch(form.dataset.uploadUrl, {
+                method: "POST",
+                body: data,
+            }).then(response => response.json()).then(json => json['url'])
+            return response;
+        }
 
-  const csrf_token = "{{csrf_token}}";
+        const progressHandler = (form) => (event) => {
+            const progress = document.querySelector(`#progress_${form.dataset.requirement} > .progress-bar`);
+            const value = (event.loaded / event.total * 100) + "%";
+            progress.style.width = value;
+            progress.innerHtml = value;
+        }
+        const completeHandler = (form) => (event) => {
+            const url = form.dataset.doneUrl;
+            const extension = new FormData(form).get('file').name.split('.').at(-1);
 
-  inputElements.forEach((element) => {
-    const requirementPk = element.dataset.requirement;
-    const pond = FilePond.create(element, {onprocessfile: (error, file) => {
-      const id = file.serverId;
-      const extension = file.fileExtension;
+            const data = new FormData();
+            data.set('csrfmiddlewaretoken', csrf_token);
+            data.set('extension', extension);
+            fetch(url, {
+                method: "POST",
+                body: data,
+            }).then(response => response.json()).then(json => {
+                const videoUrl = json['url'];
+                const requirement = form.dataset.requirement;
+                const player = videojs(`#player_${requirement}`);
+                player.src(videoUrl);
+                player.play()
+                setTimeout(() => player.pause(), 500);
 
-      const data = new FormData();
-      data.append('extension', extension);
-      data.append('upload_id', id);
-      data.append('csrfmiddlewaretoken', csrf_token);
+                form.querySelector('button').disabled = false;
+                form.querySelector('input').disabled = false;
+            })
+            document.querySelector(`#progress_${form.dataset.requirement}`).classList.add('d-none')
 
-      fetch(`/inscription/${inscriptionPk}/upload/${requirementPk}/`, {
-        method: "POST",
-        body: data,
-      }).then(response => response.text()).then(url => {
-        alert(
-          "Your video was uploaded and is now being processed, check back later to view your video here."
-        );
-      });
-    }});
-    // this is needed, otherwise the upload does not work
-    pond.name = 'filepond'
+            document.querySelector(`#progress_${form.dataset.requirement} > .progress-bar`).style.width = 0;
+        }
+        const errorHandler = (event) => {
+            form.querySelector('button').disabled = false;
+            form.querySelector('input').disabled = false;
+        }
 
+        const uploadFile = (url, form) => {
+            document.querySelector(`#progress_${form.dataset.requirement}`).classList.remove('d-none')
+            const formData = new FormData(form);
+            const request = new XMLHttpRequest();
+            request.upload.addEventListener('progress', progressHandler(form));
+            request.addEventListener('load', completeHandler(form));
+            request.addEventListener('error', errorHandler);
+            request.open('PUT', url);
+            request.setRequestHeader('Content-Type', formData.get('file').type);
 
-  })
-</script>
+            form.querySelector('button').disabled = true;
+            request.send(formData.get('file'));
+        }
+
+        uploadForms.forEach((element) => {
+            const requirementPk = element.dataset.requirement;
+            element.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const url = await getSignedUrl(element);
+                console.log(url)
+                uploadFile(url, element)
+            });
+        })
+    </script>
 {% endblock extra_script %}

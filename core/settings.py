@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'constance.backends.database',
     'constance',
-    'rest_framework',
-    'django_drf_filepond',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'modeltranslation',
@@ -254,7 +252,7 @@ Danke für deine Anmeldung als Gastfamilie für The Muri Competition. Du kannst 
 
 Q_CLUSTER = {
     'name': 'DjangORM',
-    'workers': 8, # Workers do mostly network stuff
+    'workers': 8,  # Workers do mostly network stuff
     'timeout': 2 * 60 * 60,
     'retry': 3 * 60 * 60,
     'queue_limit': 5000,
