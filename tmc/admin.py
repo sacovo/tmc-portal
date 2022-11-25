@@ -72,6 +72,7 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     list_display = (
         'given_name',
         'surname',
+        'internal_note',
         'instrument',
         'nationality',
         'language_of_correspondence',

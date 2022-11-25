@@ -165,6 +165,7 @@ class Inscription(PersonBase):
     uid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     secret_id = models.CharField(max_length=8, default=generate_secret_id, unique=True)
     instrument = models.ForeignKey(Instrument, models.CASCADE, verbose_name=_("instrument"))
+    internal_note = models.CharField(max_length=120, blank=True)
 
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, verbose_name=_("gender"))
 
