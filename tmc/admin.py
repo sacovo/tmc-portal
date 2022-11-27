@@ -111,6 +111,15 @@ def download_info(modeladmin, request, queryset):
     return response
 
 
+@admin.action(description="Enumerate inscriptions (random)")
+def enumerate_inscriptions(modeladmin, request, queryset):
+    queryset = queryset.order_by('?')
+
+    for i, q in enumerate(queryset):
+        q.secret_id = f'{i+1:04}'
+        q.save()
+
+
 @admin.register(Inscription)
 class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     resource_class = InscriptionResource
@@ -146,7 +155,7 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     readonly_fields = ['submitted_at']
 
     inlines = [RecordingInline]
-    actions = [check_recordings, download_playlist, download_info]
+    actions = [check_recordings, download_playlist, download_info, enumerate_inscriptions]
 
 
 class InscriptionInline(admin.TabularInline):
