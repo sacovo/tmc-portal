@@ -1,5 +1,6 @@
 import re
 from django.contrib import admin
+from django.db import transaction
 from django.db.models import Q, QuerySet, query
 
 from import_export.admin import ExportActionMixin, HttpResponse, ImportExportMixin
@@ -113,11 +114,12 @@ def download_info(modeladmin, request, queryset):
 
 @admin.action(description="Enumerate inscriptions (random)")
 def enumerate_inscriptions(modeladmin, request, queryset):
-    queryset = queryset.order_by('?')
+    with transaction.atomic():
+        queryset = queryset.order_by('?')
 
-    for i, q in enumerate(queryset):
-        q.secret_id = f'{i+1:04}'
-        q.save()
+        for i, q in enumerate(queryset):
+            q.secret_id = f'{i+1:04}'
+            q.save()
 
 
 @admin.register(Inscription)
@@ -148,7 +150,8 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     )
     date_hierarchy = 'submitted_at'
     search_fields = (
-        'name',
+        'given_name',
+        'surname',
         'email',
     )
 
