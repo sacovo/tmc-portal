@@ -12,7 +12,8 @@ from django.core.mail import message, send_mail
 from tmc.models import Helper, HostFamily, Inscription, JuryMember, TimeSlot
 
 EXCLUDED_FIELDS = [
-    'secret_id', 'internal_note', 'host_family', 'user', 'passport', 'photo', 'recording'
+    'secret_id', 'internal_note', 'host_family', 'user', 'passport', 'photo', 'recording',
+    'has_recordings', 'has_documents'
 ]
 
 
