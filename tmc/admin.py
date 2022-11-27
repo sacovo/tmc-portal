@@ -1,8 +1,10 @@
+import re
 from django.contrib import admin
-from django.db.models import Q
+from django.db.models import Q, QuerySet, query
 
-from import_export.admin import ExportActionMixin, ImportExportMixin
+from import_export.admin import ExportActionMixin, HttpResponse, ImportExportMixin
 from django.utils.translation import gettext as _
+import csv
 
 from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Recording, RequiredRecording, Ressort, TimeSlot
 from import_export import resources
@@ -45,14 +47,68 @@ class RecordingAdmin(admin.ModelAdmin):
 
 @admin.action(description=_("Check for recordings and documents"))
 def check_recordings(modeladmin, request, queryset):
-    has_passport = Q(passport__isnull=False)
-    has_photo = Q(photo__isnull=False)
 
-    queryset.filter(has_photo & has_passport).update(has_documents=True)
-    queryset.exclude(has_photo & has_passport).update(has_documents=False)
+    queryset.filter(Q(photo='') | Q(passport='')).update(has_documents=False)
+    queryset.exclude(Q(photo='') | Q(passport='')).update(has_documents=True)
 
     queryset.filter(recording__isnull=False).update(has_recordings=True)
     queryset.filter(recording__isnull=True).update(has_recordings=False)
+
+
+@admin.action(description="Download recording playlist")
+def download_playlist(modeladmin, request, queryset):
+    recordings = Recording.objects.filter(uploader__in=queryset).order_by(
+        'uploader__secret_id', 'requirement__nr')
+
+    results = []
+    for recording in recordings:
+        results.append({
+            'id': recording.uploader.secret_id,
+            'url': recording.recording.url,
+            'name': recording.requirement.name,
+        })
+
+    response = HttpResponse(
+        content_type='text/m3u',
+        headers={'Content-Disposition': 'attachment; filename="recordings.m3u"'},
+    )
+
+    response.write("#EXTM3U\n\n")
+    for i, result in enumerate(results):
+        line = f'#EXTINF:{i:03}, {result["id"]} - {result["name"]}\n{result["url"]}\n'
+        response.write(line)
+
+    return response
+
+
+@admin.action(description="Download recording url list")
+def download_info(modeladmin, request, queryset):
+    recordings = Recording.objects.filter(uploader__in=queryset).order_by(
+        'uploader__secret_id', 'requirement__nr')
+
+    results = []
+    for recording in recordings:
+        id = recording.uploader.secret_id
+        nr = recording.requirement.nr
+        slug = recording.requirement.slug
+        extension = recording.recording.name.split('.')[-1]
+        results.append({
+            'id': id,
+            'url': recording.recording.url,
+            'name': recording.requirement.name,
+            'slug': slug,
+            'target': f'{id}/{nr:02}_{slug}.{extension}'
+        })
+
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="recordings.csv"'},
+    )
+
+    writer = csv.DictWriter(response, ['id', 'url', 'name', 'slug', 'target'])
+    writer.writeheader()
+    writer.writerows(results)
+    return response
 
 
 @admin.register(Inscription)
@@ -90,7 +146,7 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     readonly_fields = ['submitted_at']
 
     inlines = [RecordingInline]
-    actions = [check_recordings]
+    actions = [check_recordings, download_playlist, download_info]
 
 
 class InscriptionInline(admin.TabularInline):
