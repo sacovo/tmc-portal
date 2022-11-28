@@ -1,31 +1,37 @@
-
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-
-    <style>main { min-height: 100vh; } .hidden {display: none}</style>
-    {% block extra_style %}{% endblock extra_style %}
-    <title>{% block document_title %}{% endblock document_title %} | The Muri Competition</title>
-  </head>
-  <body>
-    {% block body %}{% endblock body %}
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  </body>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous"/>
+        <script src="https://browser.sentry-cdn.com/7.21.1/bundle.min.js" integrity="sha384-xOL2QebDu7YNMtC6jW2i5RpQ5RcWOyQMTwrWBiEDezpjjXM7mXhYGz3vze77V91Q" crossorigin="anonymous"></script>
+        <style>main { min-height: 100vh; } .hidden {display: none}</style>
+        {% block extra_style %}
+        {% endblock extra_style %}
+        <title>
+            {% block document_title %}
+            {% endblock document_title %}
+        | The Muri Competition</title>
+    </head>
+    <body>
+        {% block body %}
+        {% endblock body %}
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script>
+Sentry.init({
+  dsn: '{{settings.SENTRY_DSN}}',
+  release: 'TMC',
+  integrations: [new Sentry.BrowserTracing()],
+  tracesSampleRate: 1.0,
+});
+        </script>
+    </body>
 </html>

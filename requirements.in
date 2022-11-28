@@ -29,3 +29,5 @@ django-q-email
 
 django-storages
 boto3
+
+sentry-sdk
