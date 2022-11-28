@@ -29,8 +29,6 @@
 Sentry.init({
   dsn: '{{settings.SENTRY_DSN}}',
   release: 'TMC',
-  integrations: [new Sentry.BrowserTracing()],
-  tracesSampleRate: 1.0,
 });
         </script>
     </body>
