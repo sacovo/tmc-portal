@@ -117,7 +117,7 @@
 
             document.querySelector(`#progress_${form.dataset.requirement} > .progress-bar`).style.width = 0;
         }
-        const errorHandler = (event) => {
+        const errorHandler = (form) => (event) => {
             form.querySelector('button').disabled = false;
             form.querySelector('input').disabled = false;
         }
@@ -128,7 +128,7 @@
             const request = new XMLHttpRequest();
             request.upload.addEventListener('progress', progressHandler(form));
             request.addEventListener('load', completeHandler(form));
-            request.addEventListener('error', errorHandler);
+            request.addEventListener('error', errorHandler(form));
             request.open('PUT', url);
             request.setRequestHeader('Content-Type', formData.get('file').type);
 
