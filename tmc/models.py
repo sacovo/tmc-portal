@@ -139,12 +139,15 @@ class Recording(models.Model):
     requirement = models.ForeignKey(RequiredRecording, models.CASCADE)
     recording = models.FileField(
         upload_to=recording_path,
-        validators=[FileExtensionValidator(allowed_extensions=[
-            'mp4',
-            'avi',
-            'mov',
-            'mkv',
-        ])],
+        validators=[
+            FileExtensionValidator(allowed_extensions=[
+                'mp4',
+                'avi',
+                'mov',
+                'mkv',
+                'm4v',
+            ])
+        ],
     )
     uploader = models.ForeignKey("Inscription", models.CASCADE)
 
