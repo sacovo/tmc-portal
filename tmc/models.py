@@ -166,6 +166,7 @@ def generate_secret_id():
 
 class Inscription(PersonBase):
     uid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    is_qualified = models.BooleanField(default=False, verbose_name=_("qualified"))
     secret_id = models.CharField(max_length=8, default=generate_secret_id)
     instrument = models.ForeignKey(Instrument, models.CASCADE, verbose_name=_("instrument"))
     internal_note = models.CharField(max_length=120, blank=True)

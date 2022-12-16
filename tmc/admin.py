@@ -128,6 +128,7 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
 
     list_filter = (
         'instrument',
+        'is_qualified',
         'gender',
         'accomodation_needed',
         'is_smoker',
@@ -139,6 +140,7 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     list_display = (
         'given_name',
         'surname',
+        'is_qualified',
         'internal_note',
         'instrument',
         'nationality',
@@ -154,6 +156,8 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
         'surname',
         'email',
     )
+
+    list_editable = ['is_qualified']
 
     readonly_fields = ['submitted_at']
 
