@@ -231,6 +231,11 @@ class Inscription(PersonBase):
     passport = models.FileField(blank=True, upload_to='documents/')
     photo = models.ImageField(blank=True, upload_to='photos/')
 
+    payment = models.FloatField(default=0)
+    payment_date = models.DateTimeField(blank=True, null=True)
+
+    date_of_arrival = models.DateField(blank=True, null=True)
+
     def uploaded_recordings(self):
         return Recording.objects.filter(uploader=self).exclude(recording='').count()
 
@@ -311,6 +316,9 @@ class HostFamily(PersonBase):
 
     def get_absolute_url(self):
         return reverse('tmc:host_detail', kwargs=dict(pk=self.pk))
+
+    def number_of_rooms(self):
+        return self.single_rooms * 1 + self.double_rooms * 2
 
 
 class Ressort(models.Model):

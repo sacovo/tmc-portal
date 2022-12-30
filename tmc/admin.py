@@ -6,6 +6,7 @@ from django.db.models import Q, QuerySet, query
 from import_export.admin import ExportActionMixin, HttpResponse, ImportExportMixin
 from django.utils.translation import gettext as _
 import csv
+from tmc.forms import HostAdminForm
 
 from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Recording, RequiredRecording, Ressort, TimeSlot
 from import_export import resources
@@ -176,10 +177,15 @@ class InscriptionInline(admin.TabularInline):
 
 @admin.register(HostFamily)
 class HostFamilyAdmin(admin.ModelAdmin):
+    form = HostAdminForm
     list_display = ('given_name', 'surname', 'email', 'single_rooms', 'double_rooms')
     list_filter = ('provides_breakfast', 'has_wifi', 'provides_breakfast', 'practice_allowed',
                    'smoking_allowed')
-    inlines = [InscriptionInline]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        print(type(form.cleaned_data['guests']))
+        obj.inscription_set.set(form.cleaned_data['guests'])
 
 
 class SlotInline(admin.TabularInline):

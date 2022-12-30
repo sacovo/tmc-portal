@@ -250,7 +250,7 @@ def view_host(request, pk):
     )
 
 
-SlotFormset = inlineformset_factory(Helper, TimeSlot, fields=['date', 'slot'], extra=3, max_num=4)
+SlotFormset = inlineformset_factory(Helper, TimeSlot, fields=['date', 'slot'], extra=10, max_num=20)
 
 
 def helper_signup(request):

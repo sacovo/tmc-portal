@@ -2,6 +2,7 @@ from crispy_forms.layout import HTML, Fieldset, Layout, Submit
 from django.contrib.auth import get_user_model
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
 from django.forms.widgets import DateInput
@@ -34,6 +35,7 @@ class SignupForm(forms.ModelForm, UserSignupMixin):
             'gender',
             'date_of_birth',
             'nationality',
+            'date_of_arrival',
             'address',
             'mother_tongue',
             'language_of_correspondence',
@@ -53,6 +55,7 @@ class SignupForm(forms.ModelForm, UserSignupMixin):
         ]
         widgets = {
             'date_of_birth': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'date_of_arrival': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
         }
 
     def __init__(self, *args, **kwargs):
@@ -253,3 +256,26 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
                 'notes_tranpsort',
             ),
         )
+
+
+class HostAdminForm(forms.ModelForm):
+    guests = forms.ModelMultipleChoiceField(queryset=Inscription.objects.filter(is_qualified=True),
+                                            widget=FilteredSelectMultiple(verbose_name='guests',
+                                                                          is_stacked=False),
+                                            required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(HostAdminForm, self).__init__(*args, **kwargs)
+        self.fields['guests'].initial = self.instance.inscription_set.all()
+        print(self.fields['guests'].initial)
+
+    def clean_guests(self):
+        data = self.cleaned_data['guests']
+        if len(data) > self.instance.number_of_rooms():
+            raise ValidationError(
+                f"Too many people asigned to this host (max: {self.instance.number_of_rooms()})")
+        return data
+
+    class Meta:
+        model = HostFamily
+        fields = '__all__'

@@ -13,7 +13,7 @@ from tmc.models import Helper, HostFamily, Inscription, JuryMember, TimeSlot
 
 EXCLUDED_FIELDS = [
     'secret_id', 'internal_note', 'host_family', 'user', 'passport', 'photo', 'recording',
-    'has_recordings', 'has_documents'
+    'has_recordings', 'has_documents', 'payment', 'payment_date', 'is_qualified'
 ]
 
 
