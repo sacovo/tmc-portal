@@ -422,3 +422,6 @@ class Selection(models.Model):
     inscription = models.ForeignKey(Inscription, models.CASCADE)
 
     is_valid = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['set_list__name']
