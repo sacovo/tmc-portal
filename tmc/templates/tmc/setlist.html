@@ -1,0 +1,12 @@
+{% extends "profile_base.html" %}
+{% load crispy_forms_tags i18n %}
+{% block document_title %}
+    {% trans "Select pieces" %}
+{% endblock document_title %}
+{% block title %}
+    <h1>{% trans "Select pieces" %}</h1>
+{% endblock title %}
+{% block content %}
+    <p>{% blocktrans %}Here you can choose the pieces you want to play at the competition.{% endblocktrans %}</p>
+    {% crispy formset helper %}
+{% endblock content %}

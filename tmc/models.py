@@ -1,6 +1,7 @@
 import secrets
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from uuid import uuid4
@@ -242,6 +243,11 @@ class Inscription(PersonBase):
     def total_recordings(self):
         return RequiredRecording.objects.filter(instrument=self.instrument).count()
 
+    def setlists_complete(self):
+        return Selection.objects.filter(inscription=self,
+                                        is_valid=True).count() == SetList.objects.filter(
+                                            round__instrument=self.instrument).count()
+
     def todos(self):
         todos = []
 
@@ -252,6 +258,8 @@ class Inscription(PersonBase):
             todos.append(_("Upload scan of your passport"))
         if not self.photo:
             todos.append(_("Upload a photo of yourself"))
+        if not self.setlists_complete():
+            todos.append(_("Select your pieces"))
 
         return todos
 
@@ -365,3 +373,52 @@ class Helper(PersonBase):
     is_spontaneous = models.BooleanField(verbose_name=_("spontaneous?"),
                                          help_text=_("are you available spontaneously"))
     notes = models.TextField(blank=True, verbose_name=_("notes"))
+
+
+class Round(models.Model):
+    name = models.CharField(max_length=120)
+    instrument = models.ForeignKey(Instrument, models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class SetList(models.Model):
+    name = models.CharField(max_length=120)
+    round = models.ForeignKey(Round, models.CASCADE)
+    required = models.FloatField(default=1)
+
+    def is_valid_selection(self, pieces):
+        if sum([piece.value for piece in pieces]) != self.required:
+            raise ValidationError(f"The selected amount of pieces is wrong.")
+        piece_set = set(pieces)
+
+        for piece in pieces:
+            excludes = set(piece.excludes.all())
+            overlapp = piece_set.intersection(excludes)
+            if len(overlapp) > 0:
+                raise ValidationError(
+                    f"The selection of {piece} prevents the selection of {','.join({piece.name for piece in overlapp})}"
+                )
+        return True
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Piece(models.Model):
+    name = models.CharField(max_length=300)
+    set_list = models.ForeignKey(SetList, models.CASCADE)
+    excludes = models.ManyToManyField("self", blank=True)
+    value = models.FloatField(default=1)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Selection(models.Model):
+    set_list = models.ForeignKey(SetList, models.CASCADE)
+    pieces = models.ManyToManyField(Piece)
+    inscription = models.ForeignKey(Inscription, models.CASCADE)
+
+    is_valid = models.BooleanField(default=False)

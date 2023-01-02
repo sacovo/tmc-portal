@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
 from django.forms.widgets import DateInput
 
-from tmc.models import Helper, HostFamily, Inscription, JuryMember
+from tmc.models import Helper, HostFamily, Inscription, JuryMember, Selection, SetList
 
 
 class UserSignupMixin:
@@ -279,3 +279,35 @@ class HostAdminForm(forms.ModelForm):
     class Meta:
         model = HostFamily
         fields = '__all__'
+
+
+class SelectionFormHelper(FormHelper):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.form_method = 'post'
+        self.form_id = 'id_formset'
+        self.form_class = 'horizontal'
+        self.template = 'bootstrap/table_inline_formset.html'
+        self.add_input(Submit("submit", _("Submit")))
+
+
+class SelectionForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setlist: SetList = self.instance.set_list
+        self.fields['pieces'].queryset = self.setlist.piece_set.all()
+
+    class Meta:
+        model = Selection
+        fields = ['pieces']
+        widgets = {
+            'pieces': forms.CheckboxSelectMultiple(),
+        }
+
+    def clean_pieces(self):
+        pieces = self.cleaned_data['pieces']
+        self.setlist.is_valid_selection(pieces)
+        return pieces

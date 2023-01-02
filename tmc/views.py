@@ -2,10 +2,11 @@ from django.contrib.auth import login
 import boto3
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import query
 from django.views.decorators.http import require_POST
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 from django.http import JsonResponse
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,10 +20,12 @@ from tmc.forms import (
     HostForm,
     JuryForm,
     LoginForm,
+    SelectionForm,
+    SelectionFormHelper,
     SignupForm,
     SlotFormsetHelper,
 )
-from tmc.models import Helper, Recording, RequiredRecording, TimeSlot
+from tmc.models import Helper, Recording, RequiredRecording, Selection, SetList, TimeSlot
 from tmc.services import (
     all_fields,
     fetch_helper,
@@ -194,6 +197,35 @@ def upload_completed(request, inscription_pk, requirement_pk):
     recording.save()
 
     return JsonResponse({'url': recording.recording.url})
+
+
+@login_required
+def set_list_view(request, pk):
+    instance = fetch_inscription(pk, request.user)
+    setlists = SetList.objects.filter(round__instrument=instance.instrument)
+
+    for setlist in setlists:
+        Selection.objects.get_or_create(
+            set_list=setlist,
+            inscription=instance,
+        )
+    SelectionFormSet = modelformset_factory(Selection, form=SelectionForm, extra=0)
+
+    formset = SelectionFormSet(queryset=Selection.objects.filter(inscription=instance))
+
+    if request.method == 'POST':
+        formset = SelectionFormSet(request.POST,
+                                   queryset=Selection.objects.filter(inscription=instance))
+
+        if formset.is_valid():
+            formset.save()
+            Selection.objects.filter(inscription=instance).update(is_valid=True)
+
+    return render(request, "tmc/setlist.html", {
+        'formset': formset,
+        'instance': instance,
+        'helper': SelectionFormHelper()
+    })
 
 
 def signup(request):

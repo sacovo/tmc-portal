@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 import csv
 from tmc.forms import HostAdminForm
 
-from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Recording, RequiredRecording, Ressort, TimeSlot
+from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Piece, Recording, RequiredRecording, Ressort, Round, SetList, TimeSlot
 from import_export import resources
 
 # Register your models here.
@@ -214,3 +214,28 @@ class JuryMemberAdmin(admin.ModelAdmin):
     list_display = ('given_name', 'surname', 'email')
     list_editable = ('email', )
     list_filter = ('transport_arrival', 'transport_departure', 'means_of_travel')
+
+
+class SetListInline(admin.TabularInline):
+    model = SetList
+
+
+class PieceInline(admin.TabularInline):
+    model = Piece
+
+
+@admin.register(Round)
+class RoundAdmin(admin.ModelAdmin):
+    list_display = ['name', 'instrument']
+    inlines = [SetListInline]
+
+
+@admin.register(SetList)
+class SetlistAdmin(admin.ModelAdmin):
+    list_display = ['name', 'round']
+    inlines = [PieceInline]
+
+
+@admin.register(Piece)
+class PieceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'set_list']
