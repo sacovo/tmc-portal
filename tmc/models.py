@@ -405,6 +405,9 @@ class SetList(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    class Meta:
+        ordering = ['round__name', 'name']
+
 
 class Piece(models.Model):
     name = models.CharField(max_length=300)
@@ -424,4 +427,4 @@ class Selection(models.Model):
     is_valid = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['set_list__name']
+        ordering = ['set_list']

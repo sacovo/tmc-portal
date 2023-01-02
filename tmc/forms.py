@@ -299,6 +299,9 @@ class SelectionForm(forms.ModelForm):
 
         self.setlist: SetList = self.instance.set_list
         self.fields['pieces'].queryset = self.setlist.piece_set.all()
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.fields['pieces'].label = _("Group ") + self.instance.set_list.name
 
     class Meta:
         model = Selection

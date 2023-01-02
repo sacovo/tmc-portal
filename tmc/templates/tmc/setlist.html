@@ -1,12 +1,24 @@
 {% extends "profile_base.html" %}
 {% load crispy_forms_tags i18n %}
 {% block document_title %}
-    {% trans "Select pieces" %}
+    {% trans "Select Repertoire" %}
 {% endblock document_title %}
 {% block title %}
-    <h1>{% trans "Select pieces" %}</h1>
+    <h1>{% trans "Select Repertoire" %}</h1>
 {% endblock title %}
 {% block content %}
-    <p>{% blocktrans %}Here you can choose the pieces you want to play at the competition.{% endblocktrans %}</p>
-    {% crispy formset helper %}
+    <p>
+        {% blocktrans %}Here you can choose the Repertoire you want to play at the competition. You may only choose one per group.{% endblocktrans %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form|crispy }}
+        {% for form in formset %}
+            {% ifchanged form.instance.set_list.round %}
+                <h2>{{ form.instance.set_list.round }}</h2>
+            {% endifchanged %}
+            {% crispy form %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endblock content %}
