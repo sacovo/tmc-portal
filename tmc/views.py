@@ -221,11 +221,19 @@ def set_list_view(request, pk):
             formset.save()
             Selection.objects.filter(inscription=instance).update(is_valid=True)
 
-    return render(request, "tmc/setlist.html", {
-        'formset': formset,
-        'instance': instance,
-        'helper': SelectionFormHelper()
-    })
+    return render(
+        request, "tmc/setlist.html", {
+            'formset':
+            formset,
+            'instance':
+            instance,
+            'valid':
+            all([
+                selection.is_valid for selection in Selection.objects.filter(inscription=instance)
+            ]),
+            'helper':
+            SelectionFormHelper()
+        })
 
 
 def signup(request):

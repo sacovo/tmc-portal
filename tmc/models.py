@@ -428,3 +428,12 @@ class Selection(models.Model):
 
     class Meta:
         ordering = ['set_list']
+
+    def round(self):
+        return self.set_list.round
+
+    def list_pieces(self):
+        return ','.join([piece.name for piece in self.pieces.all()])
+
+    def instrument(self):
+        return self.set_list.round.instrument

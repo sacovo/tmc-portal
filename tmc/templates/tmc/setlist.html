@@ -10,6 +10,9 @@
     <p>
         {% blocktrans %}Here you can choose the Repertoire you want to play at the competition. You may only choose one per group.{% endblocktrans %}
     </p>
+    {% if valid %}
+        <div class="alert alert-success" role="alert">You have successfully selected your repertoire!</div>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form|crispy }}

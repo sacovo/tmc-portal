@@ -1,14 +1,16 @@
 import re
+from typing import Optional
 from django.contrib import admin
 from django.db import transaction
 from django.db.models import Q, QuerySet, query
+from django.http.request import HttpRequest
 
 from import_export.admin import ExportActionMixin, HttpResponse, ImportExportMixin
 from django.utils.translation import gettext as _
 import csv
 from tmc.forms import HostAdminForm
 
-from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Piece, Recording, RequiredRecording, Ressort, Round, SetList, TimeSlot
+from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Piece, Recording, RequiredRecording, Ressort, Round, Selection, SetList, TimeSlot
 from import_export import resources
 
 # Register your models here.
@@ -79,6 +81,27 @@ def download_playlist(modeladmin, request, queryset):
     for i, result in enumerate(results):
         line = f'#EXTINF:{i:03}, {result["id"]} - {result["name"]}\n{result["url"]}\n'
         response.write(line)
+
+    return response
+
+
+@admin.action(description="Download repertoire")
+def download_repertoire(modeladmin, request, queryset):
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="repertoire.csv"'})
+    writer = csv.writer(response)
+    writer.writerow(['participant_id', 'first name', 'last name', 'round', 'set_list', 'pieces'])
+
+    for row in queryset:
+        writer.writerow([
+            row.inscription.pk,
+            row.inscription.given_name,
+            row.inscription.surname,
+            row.round(),
+            row.set_list.name,
+            ','.join(row.pieces.values_list('name', flat=True), ),
+        ])
 
     return response
 
@@ -239,3 +262,12 @@ class SetlistAdmin(admin.ModelAdmin):
 @admin.register(Piece)
 class PieceAdmin(admin.ModelAdmin):
     list_display = ['name', 'set_list']
+
+
+@admin.register(Selection)
+class SelectionAdmin(admin.ModelAdmin):
+    list_display = ['inscription', 'round', 'instrument', 'set_list', 'list_pieces', 'is_valid']
+    list_filter = ['inscription', 'is_valid', 'set_list']
+    readonly_fields = ['pieces']
+
+    actions = [download_repertoire]
