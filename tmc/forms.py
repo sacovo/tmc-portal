@@ -36,6 +36,7 @@ class SignupForm(forms.ModelForm, UserSignupMixin):
             'date_of_birth',
             'nationality',
             'date_of_arrival',
+            'time_of_arrival',
             'address',
             'mother_tongue',
             'language_of_correspondence',

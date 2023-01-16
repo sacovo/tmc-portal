@@ -236,6 +236,7 @@ class Inscription(PersonBase):
     payment_date = models.DateTimeField(blank=True, null=True)
 
     date_of_arrival = models.DateField(blank=True, null=True)
+    time_of_arrival = models.TimeField(blank=True, null=True)
 
     def uploaded_recordings(self):
         return Recording.objects.filter(uploader=self).exclude(recording='').count()
