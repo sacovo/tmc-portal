@@ -1,13 +1,20 @@
-from crispy_forms.layout import HTML, Fieldset, Layout, Submit
-from django.contrib.auth import get_user_model
-from django import forms
-from django.core.exceptions import ValidationError
-from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import HTML, Fieldset, Layout, Submit
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.forms.widgets import DateInput
+from django.utils.translation import gettext as _
 
-from tmc.models import Helper, HostFamily, Inscription, JuryMember, Selection, SetList
+from tmc.models import (
+    Helper,
+    HostFamily,
+    Inscription,
+    JuryMember,
+    Selection,
+    SetList,
+)
 
 
 class UserSignupMixin:
@@ -267,8 +274,8 @@ class HostAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(HostAdminForm, self).__init__(*args, **kwargs)
-        self.fields['guests'].initial = self.instance.inscription_set.all()
-        print(self.fields['guests'].initial)
+        if self.instance.pk:
+            self.fields['guests'].initial = self.instance.inscription_set.all()
 
     def clean_guests(self):
         data = self.cleaned_data['guests']

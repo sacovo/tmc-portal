@@ -1,17 +1,37 @@
+import csv
 import re
 from typing import Optional
+
 from django.contrib import admin
 from django.db import transaction
 from django.db.models import Q, QuerySet, query
 from django.http.request import HttpRequest
-
-from import_export.admin import ExportActionMixin, HttpResponse, ImportExportMixin
 from django.utils.translation import gettext as _
-import csv
-from tmc.forms import HostAdminForm
-
-from tmc.models import DateSlot, Helper, HostFamily, Inscription, Instrument, JuryMember, Language, Piece, Recording, RequiredRecording, Ressort, Round, Selection, SetList, TimeSlot
 from import_export import resources
+from import_export.admin import (
+    ExportActionMixin,
+    HttpResponse,
+    ImportExportMixin,
+)
+
+from tmc.forms import HostAdminForm
+from tmc.models import (
+    DateSlot,
+    Helper,
+    HostFamily,
+    Inscription,
+    Instrument,
+    JuryMember,
+    Language,
+    Piece,
+    Recording,
+    RequiredRecording,
+    Ressort,
+    Round,
+    Selection,
+    SetList,
+    TimeSlot,
+)
 
 # Register your models here.
 
