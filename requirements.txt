@@ -6,28 +6,31 @@
 #
 arrow==1.2.3
     # via django-q
-asgiref==3.5.2
-    # via django
-blessed==1.19.1
+asgiref==3.6.0
+    # via
+    #   django
+    #   django-countries
+blessed==1.20.0
     # via django-q
-boto3==1.26.12
+boto3==1.26.71
     # via -r requirements.in
-botocore==1.29.12
+botocore==1.29.71
     # via
     #   boto3
     #   s3transfer
 brotli==1.0.9
     # via whitenoise
-certifi==2022.9.24
+certifi==2022.12.7
     # via sentry-sdk
 defusedxml==0.7.1
     # via odfpy
 diff-match-patch==20200713
     # via django-import-export
-django==4.1.6
+django==4.1.7
     # via
     #   -r requirements.in
     #   django-address
+    #   django-crispy-forms
     #   django-extensions
     #   django-import-export
     #   django-model-utils
@@ -41,21 +44,21 @@ django-address==0.2.8
     # via -r requirements.in
 django-constance[database]==2.9.1
     # via -r requirements.in
-django-countries==7.4.2
+django-countries==7.5.1
     # via -r requirements.in
-django-crispy-forms==1.14.0
+django-crispy-forms==2.0
     # via -r requirements.in
 django-environ==0.9.0
     # via -r requirements.in
 django-extensions==3.2.1
     # via -r requirements.in
-django-import-export==3.0.1
+django-import-export==3.0.2
     # via -r requirements.in
 django-model-utils==4.3.1
     # via -r requirements.in
-django-modeltranslation==0.18.7
+django-modeltranslation==0.18.9
     # via -r requirements.in
-django-phonenumber-field[phonenumberslite]==7.0.0
+django-phonenumber-field[phonenumberslite]==7.0.2
     # via -r requirements.in
 django-picklefield==3.1
     # via
@@ -69,7 +72,7 @@ django-q-email==5.0.1
     # via -r requirements.in
 django-sesame[ua]==3.1
     # via -r requirements.in
-django-storages==1.13.1
+django-storages==1.13.2
     # via -r requirements.in
 et-xmlfile==1.1.0
     # via openpyxl
@@ -85,13 +88,13 @@ numpy==1.24.2
     # via pandas
 odfpy==1.4.1
     # via tablib
-openpyxl==3.0.10
+openpyxl==3.1.1
     # via tablib
 pandas==1.5.3
     # via -r requirements.in
-phonenumberslite==8.13.0
+phonenumberslite==8.13.6
     # via django-phonenumber-field
-pillow==9.3.0
+pillow==9.4.0
     # via -r requirements.in
 psycopg2-binary==2.9.5
     # via -r requirements.in
@@ -110,7 +113,7 @@ redis==3.5.3
     # via django-q
 s3transfer==0.6.0
     # via boto3
-sentry-sdk==1.11.1
+sentry-sdk==1.15.0
     # via -r requirements.in
 six==1.16.0
     # via
@@ -118,21 +121,21 @@ six==1.16.0
     #   python-dateutil
 sqlparse==0.4.3
     # via django
-tablib[html,ods,xls,xlsx,yaml]==3.2.1
+tablib[html,ods,xls,xlsx,yaml]==3.3.0
     # via django-import-export
-typing-extensions==4.4.0
+typing-extensions==4.5.0
     # via
     #   django-countries
     #   django-modeltranslation
 ua-parser==0.16.1
     # via django-sesame
-urllib3==1.26.12
+urllib3==1.26.14
     # via
     #   botocore
     #   sentry-sdk
-wcwidth==0.2.5
+wcwidth==0.2.6
     # via blessed
-whitenoise[brotli]==6.2.0
+whitenoise[brotli]==6.3.0
     # via -r requirements.in
 xlrd==2.0.1
     # via tablib
