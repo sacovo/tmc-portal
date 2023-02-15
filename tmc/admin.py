@@ -298,7 +298,7 @@ class PieceAdmin(admin.ModelAdmin):
 @admin.register(Selection)
 class SelectionAdmin(admin.ModelAdmin):
     list_display = ['inscription', 'round', 'instrument', 'set_list', 'list_pieces', 'is_valid']
-    list_filter = ['inscription', 'is_valid', 'set_list']
+    list_filter = ['is_valid', 'set_list__round__instrument']
     readonly_fields = ['pieces']
 
     actions = [download_repertoire]
