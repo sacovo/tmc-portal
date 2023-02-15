@@ -81,10 +81,14 @@ jmespath==1.0.1
     #   botocore
 markuppy==1.14
     # via tablib
+numpy==1.24.2
+    # via pandas
 odfpy==1.4.1
     # via tablib
 openpyxl==3.0.10
     # via tablib
+pandas==1.5.3
+    # via -r requirements.in
 phonenumberslite==8.13.0
     # via django-phonenumber-field
 pillow==9.3.0
@@ -97,6 +101,9 @@ python-dateutil==2.8.2
     # via
     #   arrow
     #   botocore
+    #   pandas
+pytz==2022.7.1
+    # via pandas
 pyyaml==6.0
     # via tablib
 redis==3.5.3

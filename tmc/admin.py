@@ -2,6 +2,7 @@ import csv
 import re
 from typing import Optional
 
+import pandas as pd
 from django.contrib import admin
 from django.db import transaction
 from django.db.models import Q, QuerySet, query
@@ -105,25 +106,35 @@ def download_playlist(modeladmin, request, queryset):
     return response
 
 
-@admin.action(description="Download repertoire")
-def download_repertoire(modeladmin, request, queryset):
-    response = HttpResponse(
-        content_type='text/csv',
-        headers={'Content-Disposition': 'attachment; filename="repertoire.csv"'})
-    writer = csv.writer(response)
-    writer.writerow(['participant_id', 'first name', 'last name', 'round', 'set_list', 'pieces'])
+def read_repertoire_df(queryset):
+    results = []
 
     for row in queryset:
-        writer.writerow([
-            row.inscription.pk,
-            row.inscription.given_name,
-            row.inscription.surname,
-            row.round(),
-            row.set_list.name,
-            ','.join(row.pieces.values_list('name', flat=True), ),
-        ])
+        results.append({
+            'id': row.inscription.pk,
+            'first name': row.inscription.given_name,
+            'last name': row.inscription.surname,
+            'round': str(row.round()) + " - " + str(row.set_list.name),
+            'pieces': ','.join(row.pieces.values_list('name', flat=True), ),
+        })
 
-    return response
+    df = pd.DataFrame.from_records(results)
+
+    names = df.drop_duplicates('id').set_index('id')[['first name', 'last name']]
+    pieces = df.pivot(index='id', columns='round', values=['pieces'])
+    pieces.columns = pieces.columns.droplevel(0)
+
+    return names.join(pieces).to_csv()
+
+
+@admin.action(description="Download repertoire")
+def download_repertoire(modeladmin, request, queryset):
+
+    return HttpResponse(
+        read_repertoire_df(queryset),
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="repertoire.csv"'},
+    )
 
 
 @admin.action(description="Download recording url list")

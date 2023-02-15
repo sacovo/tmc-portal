@@ -1,15 +1,13 @@
+from constance import config
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
 from django.db import transaction
-from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, reverse
-
 from sesame.utils import get_query_string
-from django.conf import settings
-from constance import config
-from django.core.mail import message, send_mail
 
-from tmc.models import Helper, HostFamily, Inscription, JuryMember, TimeSlot
+from tmc.models import Helper, HostFamily, Inscription, JuryMember
 
 EXCLUDED_FIELDS = [
     'secret_id', 'internal_note', 'host_family', 'user', 'passport', 'photo', 'recording',
@@ -127,7 +125,13 @@ def process_update(form):
     form.save(commit=True)
 
 
-def send_message(subject_template, text_template, inscription=None, user=None, target_url=''):
+def send_message(
+    subject_template,
+    text_template,
+    inscription=None,
+    user=None,
+    target_url='',
+):
 
     if user is None:
         user = inscription.user
