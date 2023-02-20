@@ -52,12 +52,12 @@ INSTALLED_APPS = [
     'django_extensions',
     'tmc.apps.AddressConfig',
     'django_countries',
-    'crispy_boostrap4',
     'tmc.apps.TMCConfig',
     'django_q',
     'phonenumber_field',
     'import_export',
     'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -191,6 +191,7 @@ USE_X_FORWARDED_PORT = True
 
 GOOGLE_API_KEY = env.str("GOOGLE_API_KEY", '')
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 PHONENUMBER_DEFAULT_REGION = 'CH'
