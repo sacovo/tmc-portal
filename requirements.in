@@ -19,6 +19,7 @@ django-phonenumber-field[phonenumberslite]
 
 django-import-export
 django-crispy-forms
+crispy-bootstrap4
 
 django-sesame[ua]
 django-constance[database]

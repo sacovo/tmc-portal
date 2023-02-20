@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 '''
 
 from pathlib import Path
+
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'tmc.apps.AddressConfig',
     'django_countries',
+    'crispy_boostrap4',
     'tmc.apps.TMCConfig',
     'django_q',
     'phonenumber_field',
