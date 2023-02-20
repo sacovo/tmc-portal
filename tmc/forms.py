@@ -182,7 +182,7 @@ class SlotFormsetHelper(FormHelper):
         self.form_method = 'post'
         self.form_id = 'id_formset'
         self.form_class = 'horizontal'
-        self.template = 'bootstrap/table_inline_formset.html'
+        self.template = 'bootstrap4/table_inline_formset.html'
         self.add_input(Submit("submit", _("Submit")))
 
 
