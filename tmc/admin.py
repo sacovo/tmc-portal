@@ -1,4 +1,5 @@
 import csv
+import io
 
 import pandas as pd
 from django.contrib import admin
@@ -129,7 +130,12 @@ def read_repertoire_df(queryset: QuerySet[Selection]):
     pieces = df.pivot(index="id", columns="round", values=["pieces"])
     pieces.columns = pieces.columns.droplevel(0)
 
-    return names.join(pieces).to_excel()
+    output = io.BytesIO()
+
+    names.join(pieces).to_excel(output)
+    output.seek(0)
+
+    return output.read()
 
 
 @admin.action(description="Download repertoire")
