@@ -123,19 +123,21 @@ def read_repertoire_df(queryset: QuerySet[Selection]):
 
     df = pd.DataFrame.from_records(results)
 
-    names = df.drop_duplicates("id").set_index("id")[["first name", "last name"]]
+    names = df.drop_duplicates("id").set_index("id")[
+        ["first name", "last name", "secret_id"]
+    ]
     pieces = df.pivot(index="id", columns="round", values=["pieces"])
     pieces.columns = pieces.columns.droplevel(0)
 
-    return names.join(pieces).to_csv()
+    return names.join(pieces).to_excel()
 
 
 @admin.action(description="Download repertoire")
 def download_repertoire(modeladmin, request, queryset):
     return HttpResponse(
         read_repertoire_df(queryset),
-        content_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="repertoire.csv"'},
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": 'attachment; filename="repertoire.xlsx"'},
     )
 
 
