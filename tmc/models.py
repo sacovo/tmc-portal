@@ -1,21 +1,21 @@
 import secrets
+from uuid import uuid4
+
+from address.models import AddressField
+from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.forms import ValidationError
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from uuid import uuid4
-
+from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
-from django.contrib.auth import get_user_model
-from address.models import AddressField
 from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
-MALE = 'm'
-FEMALE = 'f'
-NONBINARY = 'n'
-DONT_KNOW = 'x'
+MALE = "m"
+FEMALE = "f"
+NONBINARY = "n"
+DONT_KNOW = "x"
 
 GENDER_CHOICES = (
     (FEMALE, _("Female")),
@@ -25,8 +25,8 @@ GENDER_CHOICES = (
 )
 
 LANGUAGE_OF_CORRESPONDENCES = (
-    ('en', _("English")),
-    ('de', _("German")),
+    ("en", _("English")),
+    ("de", _("German")),
 )
 
 
@@ -45,7 +45,6 @@ class Instrument(models.Model):
 
 
 class PersonBase(models.Model):
-
     class Meta:
         abstract = True
 
@@ -60,59 +59,76 @@ class PersonBase(models.Model):
     email = models.EmailField(
         verbose_name=_("e-mail"),
         unique=True,
-        error_messages={'unique': _("This email has already been registered.")},
+        error_messages={"unique": _("This email has already been registered.")},
         help_text=_(
-            "make sure your e-mail is correct, as all communication will be done over e-mail"))
+            "make sure your e-mail is correct, as all communication will be done over e-mail"
+        ),
+    )
     submitted_at = models.DateTimeField(auto_now_add=True, verbose_name=_("submitted"))
 
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.given_name} {self.surname}'
+        return f"{self.given_name} {self.surname}"
 
 
 class JuryMember(PersonBase):
-    instrument = models.ForeignKey(Instrument, models.CASCADE, verbose_name=_("instrument"))
+    instrument = models.ForeignKey(
+        Instrument, models.CASCADE, verbose_name=_("instrument")
+    )
     kind = models.CharField(max_length=120, verbose_name=_("function TMC"), blank=True)
 
-    date_of_birth = models.DateField(verbose_name=_("date of birth"), blank=True, null=True)
-    ahv_number = models.CharField(max_length=20, blank=True, verbose_name=_("ahv number"))
+    date_of_birth = models.DateField(
+        verbose_name=_("date of birth"), blank=True, null=True
+    )
+    ahv_number = models.CharField(
+        max_length=20, blank=True, verbose_name=_("ahv number")
+    )
     notes = models.TextField(blank=True, verbose_name=_("notes"))
 
-    payee = models.CharField(max_length=120,
-                             blank=True,
-                             verbose_name=_("payee"),
-                             help_text=_("name of the person receiving the payment"))
+    payee = models.CharField(
+        max_length=120,
+        blank=True,
+        verbose_name=_("payee"),
+        help_text=_("name of the person receiving the payment"),
+    )
     iban = models.CharField(max_length=35, blank=True, verbose_name=_("IBAN"))
     bic = models.CharField(max_length=20, blank=True, verbose_name=_("BIC"))
-    bank_info = models.CharField(max_length=280, blank=True, verbose_name=_("bank info"))
+    bank_info = models.CharField(
+        max_length=280, blank=True, verbose_name=_("bank info")
+    )
 
-    means_of_travel = models.CharField(max_length=120,
-                                       blank=True,
-                                       verbose_name=_("means of travel"))
+    means_of_travel = models.CharField(
+        max_length=120, blank=True, verbose_name=_("means of travel")
+    )
 
-    date_of_arrival = models.DateTimeField(blank=True, null=True, verbose_name=_("date of arrival"))
-    transport_arrival = models.BooleanField(default=False,
-                                            verbose_name=_("need transport on arrival"),
-                                            help_text=_("do you need transport on arrival?"))
-    location_of_arrival = models.CharField(max_length=130,
-                                           blank=True,
-                                           verbose_name=_("location of arrival"))
-    terminal_of_arrival = models.CharField(max_length=130,
-                                           blank=True,
-                                           verbose_name=_("terminal of arrival"))
+    date_of_arrival = models.DateTimeField(
+        blank=True, null=True, verbose_name=_("date of arrival")
+    )
+    transport_arrival = models.BooleanField(
+        default=False,
+        verbose_name=_("need transport on arrival"),
+        help_text=_("do you need transport on arrival?"),
+    )
+    location_of_arrival = models.CharField(
+        max_length=130, blank=True, verbose_name=_("location of arrival")
+    )
+    terminal_of_arrival = models.CharField(
+        max_length=130, blank=True, verbose_name=_("terminal of arrival")
+    )
 
-    date_of_departure = models.DateTimeField(blank=True,
-                                             null=True,
-                                             verbose_name=_("date of departure"))
-    transport_departure = models.BooleanField(default=False,
-                                              verbose_name=_("need transport on departure"))
-    location_of_departure = models.CharField(max_length=130,
-                                             blank=True,
-                                             verbose_name=_("location of departure"))
-    terminal_of_departure = models.CharField(max_length=130,
-                                             blank=True,
-                                             verbose_name=_("terminal of departuree"))
+    date_of_departure = models.DateTimeField(
+        blank=True, null=True, verbose_name=_("date of departure")
+    )
+    transport_departure = models.BooleanField(
+        default=False, verbose_name=_("need transport on departure")
+    )
+    location_of_departure = models.CharField(
+        max_length=130, blank=True, verbose_name=_("location of departure")
+    )
+    terminal_of_departure = models.CharField(
+        max_length=130, blank=True, verbose_name=_("terminal of departuree")
+    )
 
     notes_tranpsort = models.TextField(blank=True, verbose_name=_("notes on transport"))
 
@@ -133,7 +149,7 @@ class RequiredRecording(models.Model):
 
 def recording_path(instance, filename):
     uploader = instance.uploader
-    return f'{uploader.uid}/recordings/{filename}'
+    return f"{uploader.uid}/recordings/{filename}"
 
 
 class Recording(models.Model):
@@ -141,13 +157,15 @@ class Recording(models.Model):
     recording = models.FileField(
         upload_to=recording_path,
         validators=[
-            FileExtensionValidator(allowed_extensions=[
-                'mp4',
-                'avi',
-                'mov',
-                'mkv',
-                'm4v',
-            ])
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "mp4",
+                    "avi",
+                    "mov",
+                    "mkv",
+                    "m4v",
+                ]
+            )
         ],
     )
     uploader = models.ForeignKey("Inscription", models.CASCADE)
@@ -158,7 +176,7 @@ class Recording(models.Model):
     is_complete = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.recording.name.rsplit('/')[-1]
+        return self.recording.name.rsplit("/")[-1]
 
 
 def generate_secret_id():
@@ -169,10 +187,14 @@ class Inscription(PersonBase):
     uid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     is_qualified = models.BooleanField(default=False, verbose_name=_("qualified"))
     secret_id = models.CharField(max_length=8, default=generate_secret_id)
-    instrument = models.ForeignKey(Instrument, models.CASCADE, verbose_name=_("instrument"))
+    instrument = models.ForeignKey(
+        Instrument, models.CASCADE, verbose_name=_("instrument")
+    )
     internal_note = models.CharField(max_length=120, blank=True)
 
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, verbose_name=_("gender"))
+    gender = models.CharField(
+        max_length=10, choices=GENDER_CHOICES, verbose_name=_("gender")
+    )
 
     date_of_birth = models.DateField(verbose_name=_("date of birth"))
 
@@ -191,7 +213,8 @@ class Inscription(PersonBase):
         blank=True,
         verbose_name=_("notes"),
         help_text=_(
-            "any information that we should know beforehand, not mentioned otherwise in this form"),
+            "any information that we should know beforehand, not mentioned otherwise in this form"
+        ),
     )
 
     emergency_contact = models.CharField(
@@ -207,17 +230,22 @@ class Inscription(PersonBase):
         max_length=120,
         blank=True,
         verbose_name=_("emergency relation"),
-        help_text=_("how are you related to your emergency contact, (family, friends, ...)"),
+        help_text=_(
+            "how are you related to your emergency contact, (family, friends, ...)"
+        ),
     )
 
     accomodation_needed = models.BooleanField(
         verbose_name=_("accomodation needed"),
-        help_text=_("do you need us to organise accomodation?"))
+        help_text=_("do you need us to organise accomodation?"),
+    )
     is_smoker = models.BooleanField(verbose_name=_("smoker"))
     food_needed = models.BooleanField(verbose_name=_("need food"))
     vegetarian = models.BooleanField(verbose_name=_("vegetarian"))
 
-    allergies = models.CharField(max_length=120, blank=True, verbose_name=_("allergies"))
+    allergies = models.CharField(
+        max_length=120, blank=True, verbose_name=_("allergies")
+    )
 
     host_family = models.ForeignKey(
         "HostFamily",
@@ -229,8 +257,8 @@ class Inscription(PersonBase):
     has_documents = models.BooleanField(default=False)
     has_recordings = models.BooleanField(default=False)
 
-    passport = models.FileField(blank=True, upload_to='documents/')
-    photo = models.ImageField(blank=True, upload_to='photos/')
+    passport = models.FileField(blank=True, upload_to="documents/")
+    photo = models.ImageField(blank=True, upload_to="photos/")
 
     payment = models.FloatField(default=0)
     payment_date = models.DateTimeField(blank=True, null=True)
@@ -239,15 +267,16 @@ class Inscription(PersonBase):
     time_of_arrival = models.TimeField(blank=True, null=True)
 
     def uploaded_recordings(self):
-        return Recording.objects.filter(uploader=self).exclude(recording='').count()
+        return Recording.objects.filter(uploader=self).exclude(recording="").count()
 
     def total_recordings(self):
         return RequiredRecording.objects.filter(instrument=self.instrument).count()
 
     def setlists_complete(self):
-        return Selection.objects.filter(inscription=self,
-                                        is_valid=True).count() == SetList.objects.filter(
-                                            round__instrument=self.instrument).count()
+        return (
+            Selection.objects.filter(inscription=self, is_valid=True).count()
+            == SetList.objects.filter(round__instrument=self.instrument).count()
+        )
 
     def todos(self):
         todos = []
@@ -265,25 +294,32 @@ class Inscription(PersonBase):
         return todos
 
     def get_absolute_url(self):
-        return reverse('tmc:inscription_detail', kwargs=dict(pk=self.pk))
+        return reverse("tmc:inscription_detail", kwargs={"pk": self.pk})
 
 
 class HostFamily(PersonBase):
-
     single_rooms = models.PositiveSmallIntegerField(
-        verbose_name=_("no of single rooms"), help_text=_("how many single rooms can you provide?"))
+        verbose_name=_("no of single rooms"),
+        help_text=_("how many single rooms can you provide?"),
+    )
     double_rooms = models.PositiveSmallIntegerField(
         verbose_name=_("no of double rooms"),
         help_text=_(
             "how many rooms for two people can you provide? Below you can attach notes if necessary."
-        ))
+        ),
+    )
 
-    provides_breakfast = models.BooleanField(verbose_name=_("breakfast provided"),
-                                             help_text=_("can you provide breakfast?"))
+    provides_breakfast = models.BooleanField(
+        verbose_name=_("breakfast provided"), help_text=_("can you provide breakfast?")
+    )
 
-    has_own_bathroom = models.BooleanField(verbose_name=_("own bathroom"),
-                                           help_text=_("do guests have their own bathroom?"))
-    has_wifi = models.BooleanField(verbose_name=_("wifi"), help_text=_("can guests use your wifi?"))
+    has_own_bathroom = models.BooleanField(
+        verbose_name=_("own bathroom"),
+        help_text=_("do guests have their own bathroom?"),
+    )
+    has_wifi = models.BooleanField(
+        verbose_name=_("wifi"), help_text=_("can guests use your wifi?")
+    )
     provides_transport = models.BooleanField(
         verbose_name=_("transport"),
         help_text=_("do you provide transport for the contestants?"),
@@ -296,9 +332,11 @@ class HostFamily(PersonBase):
         verbose_name=_("preferred gender"),
     )
 
-    languages = models.ManyToManyField(Language,
-                                       verbose_name=_("languages"),
-                                       help_text=_("what languages do you speak?"))
+    languages = models.ManyToManyField(
+        Language,
+        verbose_name=_("languages"),
+        help_text=_("what languages do you speak?"),
+    )
 
     pets = models.CharField(
         blank=True,
@@ -321,10 +359,10 @@ class HostFamily(PersonBase):
     notes = models.TextField(blank=True, verbose_name=_("notes"))
 
     def __str__(self):
-        return f'{self.given_name} {self.surname}'
+        return f"{self.given_name} {self.surname}"
 
     def get_absolute_url(self):
-        return reverse('tmc:host_detail', kwargs=dict(pk=self.pk))
+        return reverse("tmc:host_detail", kwargs={"pk": self.pk})
 
     def number_of_rooms(self):
         return self.single_rooms * 1 + self.double_rooms * 2
@@ -342,7 +380,7 @@ class DateSlot(models.Model):
     note = models.CharField(max_length=200)
 
     def __str__(self):
-        return f'{self.date} ({self.note})'
+        return f"{self.date} ({self.note})"
 
 
 class TimeSlot(models.Model):
@@ -350,10 +388,10 @@ class TimeSlot(models.Model):
     date = models.ForeignKey(DateSlot, models.CASCADE, verbose_name=_("datum"))
 
     SLOTS = (
-        ('morning', _("Morning")),
-        ('afternoon', _("Afternoon")),
-        ('evening', _("Evening")),
-        ('whole_day', _("Whole Day")),
+        ("morning", _("Morning")),
+        ("afternoon", _("Afternoon")),
+        ("evening", _("Evening")),
+        ("whole_day", _("Whole Day")),
     )
     slot = models.CharField(max_length=60, choices=SLOTS, verbose_name=_("slot"))
 
@@ -362,17 +400,20 @@ class TimeSlot(models.Model):
 
 
 class Helper(PersonBase):
-    slots = models.ManyToManyField(DateSlot, through=TimeSlot, verbose_name=_('slots'))
+    slots = models.ManyToManyField(DateSlot, through=TimeSlot, verbose_name=_("slots"))
     languages = models.ManyToManyField(Language, verbose_name=_("languages"))
-    other_languages = models.CharField(max_length=120,
-                                       blank=True,
-                                       verbose_name=_("other languages"))
+    other_languages = models.CharField(
+        max_length=120, blank=True, verbose_name=_("other languages")
+    )
 
     ressorts = models.ManyToManyField(Ressort, verbose_name=_("ressorts"))
-    other_ressorts = models.CharField(max_length=200, blank=True, verbose_name=_("other ressorts"))
+    other_ressorts = models.CharField(
+        max_length=200, blank=True, verbose_name=_("other ressorts")
+    )
 
-    is_spontaneous = models.BooleanField(verbose_name=_("spontaneous?"),
-                                         help_text=_("are you available spontaneously"))
+    is_spontaneous = models.BooleanField(
+        verbose_name=_("spontaneous?"), help_text=_("are you available spontaneously")
+    )
     notes = models.TextField(blank=True, verbose_name=_("notes"))
 
 
@@ -391,7 +432,7 @@ class SetList(models.Model):
 
     def is_valid_selection(self, pieces):
         if sum([piece.value for piece in pieces]) != self.required:
-            raise ValidationError(f"The selected amount of pieces is wrong.")
+            raise ValidationError("The selected amount of pieces is wrong.")
         piece_set = set(pieces)
 
         for piece in pieces:
@@ -407,7 +448,7 @@ class SetList(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['round__name', 'name']
+        ordering = ["round__name", "name"]
 
 
 class Piece(models.Model):
@@ -423,18 +464,18 @@ class Piece(models.Model):
 class Selection(models.Model):
     set_list = models.ForeignKey(SetList, models.CASCADE)
     pieces = models.ManyToManyField(Piece)
-    inscription = models.ForeignKey(Inscription, models.CASCADE)
+    inscription = models.ForeignKey[Inscription](Inscription, models.CASCADE)
 
     is_valid = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['set_list']
+        ordering = ["set_list"]
 
     def round(self):
         return self.set_list.round
 
     def list_pieces(self):
-        return ','.join([piece.name for piece in self.pieces.all()])
+        return ",".join([piece.name for piece in self.pieces.all()])
 
     def instrument(self):
         return self.set_list.round.instrument
