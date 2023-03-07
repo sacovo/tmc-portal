@@ -50,6 +50,21 @@ class InscriptionResource(resources.ModelResource):
         model = Inscription
 
 
+class JuryResource(resources.ModelResource):
+    class Meta:
+        model = JuryMember
+
+
+class HostFamilyResource(resources.ModelResource):
+    class Meta:
+        model = HostFamily
+
+
+class HelperResource(resources.ModelResource):
+    class Meta:
+        model = Helper
+
+
 @admin.register(RequiredRecording)
 class RequiredRecordingAdmin(admin.ModelAdmin):
     list_display = ("name", "nr", "instrument", "slug")
@@ -255,8 +270,9 @@ class InscriptionInline(admin.TabularInline):
 
 
 @admin.register(HostFamily)
-class HostFamilyAdmin(admin.ModelAdmin):
+class HostFamilyAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     form = HostAdminForm
+    resource_class = HostFamilyResource
     list_display = ("given_name", "surname", "email", "single_rooms", "double_rooms")
     list_filter = (
         "provides_breakfast",
@@ -278,7 +294,8 @@ class SlotInline(admin.TabularInline):
 
 
 @admin.register(Helper)
-class HelperAdmin(admin.ModelAdmin):
+class HelperAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
+    resource_class = HelperResource
     list_display = ("given_name", "surname", "email")
     inlines = [SlotInline]
 
@@ -294,7 +311,8 @@ class RessortAdmin(admin.ModelAdmin):
 
 
 @admin.register(JuryMember)
-class JuryMemberAdmin(admin.ModelAdmin):
+class JuryMemberAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
+    resource_class = JuryResource
     list_display = ("given_name", "surname", "email")
     list_editable = ("email",)
     list_filter = ("transport_arrival", "transport_departure", "means_of_travel")
