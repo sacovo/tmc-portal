@@ -1,18 +1,14 @@
-from django.contrib.auth import login
 import boto3
 from django.conf import settings
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import query
-from django.views.decorators.http import require_POST
-from django.core.files.base import ContentFile
 from django.db import transaction
 from django.forms import inlineformset_factory, modelformset_factory
 from django.http import JsonResponse
-from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls.base import reverse
 from django.utils.translation import gettext as _
-from django_q.tasks import async_task
+from django.views.decorators.http import require_POST
 
 from tmc.forms import (
     DocumentForm,
@@ -25,7 +21,14 @@ from tmc.forms import (
     SignupForm,
     SlotFormsetHelper,
 )
-from tmc.models import Helper, Recording, RequiredRecording, Selection, SetList, TimeSlot
+from tmc.models import (
+    Helper,
+    Recording,
+    RequiredRecording,
+    Selection,
+    SetList,
+    TimeSlot,
+)
 from tmc.services import (
     all_fields,
     fetch_helper,
@@ -45,51 +48,52 @@ from tmc.services import (
 
 def landing(request):
     if not request.user.is_authenticated:
-        return redirect('tmc:signup')
+        return redirect("tmc:signup")
 
     if request.user.is_staff:
-        return redirect('admin:index')
+        return redirect("admin:index")
 
     user = request.user
 
-    if hasattr(user, 'inscription'):
-        return redirect('tmc:inscription_detail', pk=user.inscription.pk)
+    if hasattr(user, "inscription"):
+        return redirect("tmc:inscription_detail", pk=user.inscription.pk)
 
-    if hasattr(user, 'hostfamily'):
-        return redirect('tmc:host_detail', pk=user.hostfamily.pk)
+    if hasattr(user, "hostfamily"):
+        return redirect("tmc:host_detail", pk=user.hostfamily.pk)
 
-    if hasattr(user, 'helper'):
-        return redirect('tmc:helper_detail', pk=user.helper.pk)
+    if hasattr(user, "helper"):
+        return redirect("tmc:helper_detail", pk=user.helper.pk)
 
-    if hasattr(user, 'jurymember'):
-        return redirect('tmc:jury_detail', pk=user.jurymember.pk)
+    if hasattr(user, "jurymember"):
+        return redirect("tmc:jury_detail", pk=user.jurymember.pk)
 
-    return redirect('tmc:signup')
+    return redirect("tmc:signup")
 
 
 def login_view(request):
     form = LoginForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = LoginForm(request.POST)
 
         if form.is_valid():
             send_auth_message(
-                form.cleaned_data['email'],
-                request.build_absolute_uri(reverse('tmc:landing')),
+                form.cleaned_data["email"],
+                request.build_absolute_uri(reverse("tmc:landing")),
             )
-            return render(request, 'tmc/login_sent.html', {'form': form})
-    return render(request, 'tmc/login.html', {'form': form})
+            return render(request, "tmc/login_sent.html", {"form": form})
+    return render(request, "tmc/login.html", {"form": form})
 
 
 @login_required
 def view_signup(request, pk):
     instance = fetch_inscription(pk, request.user)
 
-    return render(request, 'tmc/inscription_detail.html', {
-        'instance': instance,
-        'fields': all_fields(instance)
-    })
+    return render(
+        request,
+        "tmc/inscription_detail.html",
+        {"instance": instance, "fields": all_fields(instance)},
+    )
 
 
 @login_required
@@ -98,13 +102,15 @@ def update_signup(request, pk):
 
     form = SignupForm(instance=instance)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SignupForm(request.POST, instance=instance)
 
         if form.is_valid():
             process_update(form)
-            return redirect('tmc:inscription_detail', pk=instance.pk)
-    return render(request, 'tmc/inscription_update.html', {'form': form, 'instance': instance})
+            return redirect("tmc:inscription_detail", pk=instance.pk)
+    return render(
+        request, "tmc/inscription_update.html", {"form": form, "instance": instance}
+    )
 
 
 @login_required
@@ -113,20 +119,17 @@ def update_documents(request, pk):
 
     form = DocumentForm(instance=instance)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = DocumentForm(request.POST, request.FILES, instance=instance)
 
         if form.is_valid():
             form.save()
-            return redirect('tmc:documents', pk=instance.pk)
+            return redirect("tmc:documents", pk=instance.pk)
 
     return render(
         request,
-        'tmc/inscription_documents.html',
-        {
-            'form': form,
-            'instance': instance
-        },
+        "tmc/inscription_documents.html",
+        {"form": form, "instance": instance},
     )
 
 
@@ -137,14 +140,16 @@ def recordings(request, pk):
     requirements = []
 
     for requirement in RequiredRecording.objects.filter(instrument=instance.instrument):
-        requirement.recording = Recording.objects.filter(requirement=requirement,
-                                                         uploader=instance).first()
+        requirement.recording = Recording.objects.filter(
+            requirement=requirement, uploader=instance
+        ).first()
         requirements.append(requirement)
 
-    return render(request, 'tmc/recordings.html', {
-        'requirements': requirements,
-        'instance': instance
-    })
+    return render(
+        request,
+        "tmc/recordings.html",
+        {"requirements": requirements, "instance": instance},
+    )
 
 
 @require_POST
@@ -155,7 +160,7 @@ def signed_upload_url(request, inscription_pk, requirement_pk):
     requirement = get_object_or_404(RequiredRecording, pk=requirement_pk)
 
     instance = fetch_inscription(inscription_pk, request.user)
-    extension = request.POST['extension']
+    extension = request.POST["extension"]
 
     client = session.client(
         "s3",
@@ -166,7 +171,7 @@ def signed_upload_url(request, inscription_pk, requirement_pk):
     )
     name = f"{requirement.nr:02}_{requirement.slug}.{extension}"
 
-    path = f'{instance.uid}/recordings/{name}'
+    path = f"{instance.uid}/recordings/{name}"
 
     url = client.generate_presigned_url(
         ClientMethod="put_object",
@@ -177,7 +182,7 @@ def signed_upload_url(request, inscription_pk, requirement_pk):
         ExpiresIn=60 * 30,
     )
 
-    return JsonResponse({'url': url})
+    return JsonResponse({"url": url})
 
 
 @require_POST
@@ -185,18 +190,20 @@ def signed_upload_url(request, inscription_pk, requirement_pk):
 def upload_completed(request, inscription_pk, requirement_pk):
     requirement = get_object_or_404(RequiredRecording, pk=requirement_pk)
     instance = fetch_inscription(inscription_pk, request.user)
-    extension = request.POST['extension']
+    extension = request.POST["extension"]
 
-    recording, _ = Recording.objects.get_or_create(uploader=instance, requirement=requirement)
+    recording, _ = Recording.objects.get_or_create(
+        uploader=instance, requirement=requirement
+    )
     name = f"{requirement.nr:02}_{requirement.slug}.{extension}"
 
-    path = f'{instance.uid}/recordings/{name}'
+    path = f"{instance.uid}/recordings/{name}"
 
     recording.recording = path
     recording.is_complete = True
     recording.save()
 
-    return JsonResponse({'url': recording.recording.url})
+    return JsonResponse({"url": recording.recording.url})
 
 
 @login_required
@@ -213,56 +220,60 @@ def set_list_view(request, pk):
 
     formset = SelectionFormSet(queryset=Selection.objects.filter(inscription=instance))
 
-    if request.method == 'POST':
-        formset = SelectionFormSet(request.POST,
-                                   queryset=Selection.objects.filter(inscription=instance))
-
-        if formset.is_valid():
-            formset.save()
-            Selection.objects.filter(inscription=instance).update(is_valid=True)
-
     return render(
-        request, "tmc/setlist.html", {
-            'formset':
-            formset,
-            'instance':
-            instance,
-            'valid':
-            all([
-                selection.is_valid for selection in Selection.objects.filter(inscription=instance)
-            ]),
-            'helper':
-            SelectionFormHelper()
-        })
+        request,
+        "tmc/setlist.html",
+        {
+            "formset": formset,
+            "instance": instance,
+            "valid": all(
+                [
+                    selection.is_valid
+                    for selection in Selection.objects.filter(inscription=instance)
+                ]
+            ),
+            "helper": SelectionFormHelper(),
+        },
+    )
 
 
 def signup(request):
     form = SignupForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SignupForm(request.POST)
 
         if form.is_valid():
             with transaction.atomic():
-                instance = process_signup(form, request.build_absolute_uri(reverse('tmc:landing')))
-                login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
-            return redirect('tmc:inscription_detail', pk=instance.pk)
+                instance = process_signup(
+                    form, request.build_absolute_uri(reverse("tmc:landing"))
+                )
+                login(
+                    request,
+                    instance.user,
+                    backend="django.contrib.auth.backends.ModelBackend",
+                )
+            return redirect("tmc:inscription_detail", pk=instance.pk)
 
-    return render(request, 'tmc/signup.html', {'form': form})
+    return render(request, "tmc/signup.html", {"form": form})
 
 
 def host_signup(request):
     form = HostForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = HostForm(request.POST)
 
         if form.is_valid():
             instance = process_host_signup(form, request)
-            login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
-            return redirect('tmc:host_detail', pk=instance.pk)
+            login(
+                request,
+                instance.user,
+                backend="django.contrib.auth.backends.ModelBackend",
+            )
+            return redirect("tmc:host_detail", pk=instance.pk)
 
-    return render(request, 'tmc/host_form.html', {'form': form})
+    return render(request, "tmc/host_form.html", {"form": form})
 
 
 @login_required
@@ -270,9 +281,9 @@ def view_host(request, pk):
     host = fetch_host(pk, request.user)
     form = HostForm(instance=host)
 
-    message = ''
+    message = ""
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = HostForm(request.POST, instance=host)
 
         if form.is_valid():
@@ -281,16 +292,18 @@ def view_host(request, pk):
 
     return render(
         request,
-        'tmc/host_form.html',
+        "tmc/host_form.html",
         {
-            'host': host,
-            'form': form,
-            'message': message,
+            "host": host,
+            "form": form,
+            "message": message,
         },
     )
 
 
-SlotFormset = inlineformset_factory(Helper, TimeSlot, fields=['date', 'slot'], extra=10, max_num=20)
+SlotFormset = inlineformset_factory(
+    Helper, TimeSlot, fields=["date", "slot"], extra=10, max_num=20
+)
 
 
 def helper_signup(request):
@@ -298,20 +311,28 @@ def helper_signup(request):
     formset = SlotFormset()
     helper = SlotFormsetHelper()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = HelperForm(request.POST)
         formset = SlotFormset(request.POST)
 
         if form.is_valid() and formset.is_valid():
             instance = process_helper_signup(form, formset, request)
-            login(request, instance.user, backend="django.contrib.auth.backends.ModelBackend")
-            return redirect('tmc:helper_detail', pk=instance.pk)
+            login(
+                request,
+                instance.user,
+                backend="django.contrib.auth.backends.ModelBackend",
+            )
+            return redirect("tmc:helper_detail", pk=instance.pk)
 
-    return render(request, 'tmc/helper_form.html', {
-        'form': form,
-        'formset': formset,
-        'formset_helper': helper,
-    })
+    return render(
+        request,
+        "tmc/helper_form.html",
+        {
+            "form": form,
+            "formset": formset,
+            "formset_helper": helper,
+        },
+    )
 
 
 @login_required
@@ -321,9 +342,9 @@ def view_helper(request, pk):
     formset = SlotFormset(instance=helper)
     formset_helper = SlotFormsetHelper()
 
-    message = ''
+    message = ""
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = HelperForm(request.POST, instance=helper)
         formset = SlotFormset(request.POST, instance=helper)
 
@@ -332,17 +353,17 @@ def view_helper(request, pk):
             form.save()
             formset.save()
 
-            return redirect('tmc:helper_detail', pk=pk)
+            return redirect("tmc:helper_detail", pk=pk)
 
     return render(
         request,
-        'tmc/helper_form.html',
+        "tmc/helper_form.html",
         {
-            'helper': helper,
-            'form': form,
-            'formset': formset,
-            'formset_helper': formset_helper,
-            'message': message,
+            "helper": helper,
+            "form": form,
+            "formset": formset,
+            "formset_helper": formset_helper,
+            "message": message,
         },
     )
 
@@ -352,12 +373,12 @@ def view_helper(request, pk):
 def jury_signup(request):
     form = JuryForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = JuryForm(request.POST)
         if form.is_valid():
             instance = process_jury_signup(form, request)
-            return redirect('tmc:jury_detail', pk=instance.pk)
-    return render(request, 'tmc/jury_form.html', {'form': form})
+            return redirect("tmc:jury_detail", pk=instance.pk)
+    return render(request, "tmc/jury_form.html", {"form": form})
 
 
 @login_required
@@ -365,9 +386,9 @@ def view_jury(request, pk):
     jury = fetch_jury(pk, request.user)
     form = JuryForm(instance=jury)
 
-    message = ''
+    message = ""
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = JuryForm(request.POST, instance=jury)
 
         if form.is_valid():
@@ -376,10 +397,10 @@ def view_jury(request, pk):
 
     return render(
         request,
-        'tmc/jury_form.html',
+        "tmc/jury_form.html",
         {
-            'jury': jury,
-            'form': form,
-            'message': message,
+            "jury": jury,
+            "form": form,
+            "message": message,
         },
     )
