@@ -124,7 +124,7 @@ six==1.16.0
     # via
     #   blessed
     #   python-dateutil
-sqlparse==0.4.3
+sqlparse==0.4.4
     # via django
 tablib[html,ods,xls,xlsx,yaml]==3.3.0
     # via django-import-export
