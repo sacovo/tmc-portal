@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && \
   apt-get install -y \
-    netcat gettext
+  netcat-traditional gettext
 
 # install dependencies
 RUN pip install --no-cache --upgrade pip

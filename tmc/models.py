@@ -240,7 +240,6 @@ class Inscription(PersonBase):
         help_text=_("do you need us to organise accomodation?"),
     )
     is_smoker = models.BooleanField(verbose_name=_("smoker"))
-    food_needed = models.BooleanField(verbose_name=_("need food"))
     vegetarian = models.BooleanField(verbose_name=_("vegetarian"))
 
     allergies = models.CharField(

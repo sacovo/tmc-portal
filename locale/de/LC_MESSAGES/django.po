@@ -620,10 +620,10 @@ msgstr "TMC Anmeldung"
 #: tmc/templates/tmc/signup.html:12
 msgid ""
 "Register now for the muri competition, deadline for your application is the "
-"15th of november 2022."
+"15th of november 2025."
 msgstr ""
 "Melde dich jetzt für The Muri Competition an, die Anmeldefrist ist der 15. "
-"November 2022."
+"November 2025."
 
 #: tmc/templates/tmc/signup.html:14
 msgid "Terms of application"
@@ -631,10 +631,10 @@ msgstr "Teilnahmebedingungen"
 
 #: tmc/templates/tmc/signup.html:16
 msgid ""
-"Young soloists born in or after 1993 are eligible to apply to the "
+"Young soloists born in or after 1996 are eligible to apply to the "
 "competition. A maximum of 50 participants per instrument will be admitted."
 msgstr ""
-"Junge Solist*innen geboren in oder nach 1993 können sich für den Wettbewerb "
+"Junge Solist*innen geboren in oder nach 1996 können sich für den Wettbewerb "
 "anmelden. Jeweils max. 50Teilnehmende pro Instrument werden zum Wettbewerb "
 "zugelassen."
 

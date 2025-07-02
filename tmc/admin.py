@@ -215,7 +215,6 @@ class InscriptionAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
         "gender",
         "accomodation_needed",
         "is_smoker",
-        "food_needed",
         "vegetarian",
         "has_recordings",
         "has_documents",
