@@ -22,9 +22,17 @@
                     <a class="nav-link"
                        href="{% url 'tmc:inscription_update' instance.pk %}">{% trans "Update Account" %}</a>
                 </li>
+                <!-- <li class="nav-item"> -->
+                <!--     <a class="nav-link" href="{% url 'tmc:setlist' instance.pk %}">{% trans "Repertoire" %}</a> -->
+                <!-- </li> -->
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'tmc:setlist' instance.pk %}">{% trans "Repertoire" %}</a>
+                    <a class="nav-link" href="{% url 'tmc:documents' instance.pk %}">{% trans "Documents" %}</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tmc:recordings' instance.pk %}">{% trans "Recordings" %}</a>
+                </li>
+
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if user.is_staff %}

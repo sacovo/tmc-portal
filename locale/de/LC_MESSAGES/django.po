@@ -553,8 +553,8 @@ msgid "Upload documents"
 msgstr "Dokumente hochladen"
 
 #: tmc/templates/tmc/inscription_documents.html:12
-msgid "Upload the required documents until the 30th of November!"
-msgstr "Lade die benötigten Dokuemnte bis am 30. November hoch."
+msgid "Upload the required documents until the 15th of November!"
+msgstr "Lade die benötigten Dokuemnte bis am 15. November hoch."
 
 #: tmc/templates/tmc/jury_form.html:4 tmc/templates/tmc/jury_form.html:7
 msgid "Signup as jury member"
@@ -592,7 +592,7 @@ msgstr "Hier kannst du die benötigten Aufnahmen hochladen."
 #: tmc/templates/tmc/recordings.html:23
 msgid ""
 "Your recording must be in the mp4 format. Please convert your video to one "
-"of these types before uploading!Your recordings are not allowed to be cut."
+"of these types before uploading! Your recordings are not allowed to be cut."
 msgstr ""
 "Dein Video muss im mp4 Format sein, konvertiere es vor dem hochladen. Die "
 "Aufnahmen dürfen nicht geschnitten werden."
