@@ -3,6 +3,9 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
+msgid ""
+msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-13 20:49+0200\n"
@@ -540,8 +543,8 @@ msgstr "Deine Aufgaben"
 
 #: tmc/templates/tmc/inscription_documents.html:4
 #: tmc/templates/tmc/inscription_documents.html:7
-msgid "Upload required recordings (23th of November)"
-msgstr "Aufnahmen hochladen (bis am 23. November)"
+msgid "Upload required recordings"
+msgstr "Aufnahmen hochladen"
 
 #: tmc/templates/tmc/inscription_documents.html:12
 msgid "Upload the required documents until the 15th of November!"
