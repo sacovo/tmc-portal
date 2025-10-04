@@ -284,14 +284,14 @@ class Inscription(PersonBase):
         todos = []
 
         if self.uploaded_recordings() < self.total_recordings():
-            todos.append(_("Upload required recordings"))
+            todos.append(_("Upload required recordings (23th of November)"))
         print(self.passport)
         if not self.passport:
-            todos.append(_("Upload scan of your passport"))
+            todos.append(_("Upload scan of your passport (15th of November"))
         if not self.photo:
-            todos.append(_("Upload a photo of yourself"))
-        if not self.setlists_complete():
-            todos.append(_("Select your pieces"))
+            todos.append(_("Upload a photo of yourself (15th of November"))
+        # if not self.setlists_complete():
+        #     todos.append(_("Select your pieces"))
 
         return todos
 

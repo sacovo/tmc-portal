@@ -57,17 +57,13 @@ msgstr "Anmelden"
 
 #: tmc/forms.py:223
 msgid "This is a legend"
-msgstr ""
+msgstr "Das ist eine Legende"
 
 #: tmc/forms.py:236
-#, fuzzy
-#| msgid "Update information"
 msgid "Bank information"
 msgstr "Informationen aktualisieren"
 
 #: tmc/forms.py:243
-#, fuzzy
-#| msgid "Update information"
 msgid "Travel information"
 msgstr "Informationen aktualisieren"
 
@@ -286,16 +282,16 @@ msgid "allergies"
 msgstr "Allergien"
 
 #: tmc/models.py:236
-msgid "Upload required recordings"
-msgstr "Erforderliche Aufnahmen hochladen"
+msgid "Upload required recordings (23th of November)"
+msgstr "Erforderliche Aufnahmen hochladen (23. November)"
 
 #: tmc/models.py:239
-msgid "Upload scan of your passport"
-msgstr "Einen Scan deines Passes hochladen"
+msgid "Upload scan of your passport (15h of November)"
+msgstr "Einen Scan deines Passes hochladen (15. November)"
 
 #: tmc/models.py:241
-msgid "Upload a photo of yourself"
-msgstr "Ein Photo von dir hochladen"
+msgid "Upload a photo of yourself (15th of November)"
+msgstr "Ein Photo von dir hochladen (15. November)"
 
 #: tmc/models.py:252
 msgid "no of single rooms"
@@ -518,8 +514,6 @@ msgstr ""
 "gemäss der Datenschutzerklärungeinverstanden."
 
 #: tmc/templates/tmc/host_form.html:4 tmc/templates/tmc/host_form.html:7
-#, fuzzy
-#| msgid "Signup"
 msgid "Signup as host"
 msgstr "Anmelden"
 
@@ -549,12 +543,12 @@ msgstr "Deine Aufgaben"
 
 #: tmc/templates/tmc/inscription_documents.html:4
 #: tmc/templates/tmc/inscription_documents.html:7
-msgid "Upload documents"
-msgstr "Dokumente hochladen"
+msgid "Upload required recordings"
+msgstr "Aufnahmen hochladen"
 
 #: tmc/templates/tmc/inscription_documents.html:12
-msgid "Upload the required documents until the 30th of November!"
-msgstr "Lade die benötigten Dokuemnte bis am 30. November hoch."
+msgid "Upload the required documents until the 15th of November!"
+msgstr "Lade die benötigten Dokumente bis am 15. November hoch."
 
 #: tmc/templates/tmc/jury_form.html:4 tmc/templates/tmc/jury_form.html:7
 msgid "Signup as jury member"
@@ -592,7 +586,7 @@ msgstr "Hier kannst du die benötigten Aufnahmen hochladen."
 #: tmc/templates/tmc/recordings.html:23
 msgid ""
 "Your recording must be in the mp4 format. Please convert your video to one "
-"of these types before uploading!Your recordings are not allowed to be cut."
+"of these types before uploading! Your recordings are not allowed to be cut."
 msgstr ""
 "Dein Video muss im mp4 Format sein, konvertiere es vor dem hochladen. Die "
 "Aufnahmen dürfen nicht geschnitten werden."
