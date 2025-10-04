@@ -374,7 +374,7 @@ def jury_signup(request):
     form = JuryForm()
 
     if request.method == "POST":
-        form = JuryForm(request.POST)
+        form = JuryForm(request.POST, request.FILES)
         if form.is_valid():
             instance = process_jury_signup(form, request)
             return redirect("tmc:jury_detail", pk=instance.pk)
@@ -389,7 +389,7 @@ def view_jury(request, pk):
     message = ""
 
     if request.method == "POST":
-        form = JuryForm(request.POST, instance=jury)
+        form = JuryForm(request.POST, request.FILES, instance=jury)
 
         if form.is_valid():
             form.save()

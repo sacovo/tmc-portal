@@ -86,6 +86,9 @@ class JuryMember(PersonBase):
     )
     notes = models.TextField(blank=True, verbose_name=_("notes"))
 
+    insurance_documents = models.FileField(blank=True, upload_to="documents-jury/")
+    photo = models.ImageField(blank=True, upload_to="photos-jury/")
+
     payee = models.CharField(
         max_length=120,
         blank=True,

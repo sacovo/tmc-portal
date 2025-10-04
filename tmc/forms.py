@@ -196,6 +196,8 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
             "phone",
             "email",
             "notes",
+            "photo",
+            "insurance_documents",
             "instrument",
             "kind",
             "date_of_birth",
@@ -240,6 +242,12 @@ class JuryForm(forms.ModelForm, UserSignupMixin):
                 "instrument",
                 "date_of_birth",
                 "ahv_number",
+            ),
+            HTML("<hr/>"),
+            Fieldset(
+                _("Personal Documents"),
+                "photo",
+                "insurance_documents",
             ),
             HTML("<hr/>"),
             Fieldset(
