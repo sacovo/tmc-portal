@@ -218,6 +218,18 @@ def set_list_view(request, pk):
         )
     SelectionFormSet = modelformset_factory(Selection, form=SelectionForm, extra=0)
 
+    if request.method == "POST":
+
+        formset = SelectionFormSet(
+            request.POST, queryset=Selection.objects.filter(inscription=instance)
+        )
+
+        if formset.is_valid():
+
+            formset.save()
+
+            Selection.objects.filter(inscription=instance).update(is_valid=True)
+
     formset = SelectionFormSet(queryset=Selection.objects.filter(inscription=instance))
 
     return render(
