@@ -220,7 +220,7 @@ def set_list_view(request, pk):
 
     formset = SelectionFormSet(queryset=Selection.objects.filter(inscription=instance))
 
-    if request.method == "POST":
+    if request.method == "POST" and False:
 
         formset = SelectionFormSet(
             request.POST, queryset=Selection.objects.filter(inscription=instance)
